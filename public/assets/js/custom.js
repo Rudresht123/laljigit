@@ -145,6 +145,37 @@ function populateDatalist(data) {
     }
 }
 
+// sub status
+function populateSubstatus(route, selectedSlug = null) {
+    $.ajax({
+        url: route,
+        type: 'GET',
+        success: function (response) {
+            let select = $('#sub-status');
+            select.empty(); // Clear existing options before appending new ones
+            select.append(`<option value="">**Please Select Sub Status..</option>`);
+            response.forEach(substatus => {
+                // Check if this substatus should be selected
+                let isSelected = selectedSlug && substatus.slug === selectedSlug ? 'selected' : '';
+                let option = `
+                    <option value="${substatus.id}" data-slug="${substatus.slug}" ${isSelected}>
+                        ${substatus.substatus_name}
+                    </option>
+                `;
+                select.append(option);
+            });
+
+            // Trigger any additional logic if needed
+            if (selectedSlug) {
+                select.trigger('change'); // Trigger change event if a selection was made
+            }
+        },
+        error: function () {
+            console.error('Failed to fetch substatus');
+        }
+    });
+}
+
 
 
 

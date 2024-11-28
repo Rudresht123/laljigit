@@ -395,6 +395,7 @@ $(document).ready(function() {
 <script src="{{ asset('../../assets/js/custom.js') }}"></script>
 <script src="{{ asset('../../assets/js/chart.js')}}"></script>
 <script src="{{ asset('../../assets/js/datatable.js')}}"></script>
+<script src="{{ asset('../../assets/js/options.js')}}"></script>
 </body>
 
 </html>
