@@ -1,5 +1,6 @@
 function getOpptionsforStatus(slug) {
     // Reset visibility of all elements
+   
     $('#opposed_no, #rectification_no, #opponent_applicant, #applicant_name, #applicant_code, #opponent_name, #opponent_code,#examination_report_submitted,#hearing_date').css('display', 'none');
 
     // Adjust visibility based on slug
@@ -18,14 +19,13 @@ function getOpptionsforStatus(slug) {
             getOpponentApplicantNameNumber(getvalue, slug);
         });
     }
-    else if(slug=='objected'){
+    else if(slug === 'objected'){
         $('#sub-status').off('change').on('change', function () {
             let substatusSlug = $(this).find(':selected').data('slug');
             subStatusHearingDateExaminationReport(slug,substatusSlug);
         });   
     }
     else {
-        // Ensure no lingering events for unrelated slugs
         $('#opp_app_name').off('change');
     }
 }
@@ -48,6 +48,7 @@ function getOpponentApplicantNameNumber(getvalue, slug) {
     }
 }
 function subStatusHearingDateExaminationReport(slug,substatusSlug) {
+    alert(slug);
     if (slug !== 'objected') {
         $('#examination_report_submitted, #hearing_date').css('display', 'none');
         return;

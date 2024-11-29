@@ -77,7 +77,7 @@
                         </div>
                     </div>
                     @if ($category->category_slug === 'trademark')
-                        <form action="{{ route('admin.attorney.addtrademarkformdata') }}" method="POST">
+                        <form id="registrationTrademarkForm" action="{{ route('admin.attorney.addtrademarkformdata') }}" method="POST">
                             @csrf
                             <fieldset class="form-fieldset">
                                 <legend>Basic Information</legend>
@@ -101,7 +101,7 @@
                                     <div class="col-sm-4">
                                         <label for="" class="form-label">Office<span
                                                 class="text-danger">*</span></label>
-                                        <select name="office_id" class="form-select" id="">
+                                        <select name="office_id" class="form-select" required id="office_id">
                                             <option value="">**Please Office Name...</option>
                                             @foreach ($offices as $office)
                                                 <option value="{{ $office->id ? $office->id : '' }}">
@@ -134,7 +134,7 @@
                                     <div class="col-sm-4">
                                         <label for="" class="form-label">TradeMark Class<span
                                                 class="text-danger">*</span></label>
-                                        <select name="trademark_class" class="form-select" id="">
+                                        <select name="trademark_class" required class="form-select" id="trademarkclass">
                                             <option value="">**Please Select Trademark Class...</option>
                                             @foreach ($classes as $class)
                                                 <option value="{{ $class->class_name ? $class->class_name : '' }}">
@@ -186,8 +186,7 @@
 
 
                                     <div class="col-sm-4">
-                                        <label for="" class="form-label">Valid up-To<span
-                                                class="text-danger">*</span></label>
+                                        <label for="" class="form-label">Valid up-To</label>
                                         <input type="text" value="{{ old('valid_up_to') }}"
                                             class="form-control datepicker" name="valid_up_to" required
                                             placeholder="Valid Up to..">
@@ -198,7 +197,7 @@
                                     <div class="col-sm-4">
                                         <label for="" class="form-label">Status<span
                                                 class="text-danger">*</span></label>
-                                        <select name="status" id="status" class="form-select" id="">
+                                        <select name="status" id="status" required class="form-select" id="">
                                             <option value="">**Please Select Status</option>
                                             @foreach ($statuss as $status)
                                                 <option data-slug="{{ $status->slug ?? '' }}"
@@ -211,7 +210,7 @@
                                     <div class="col-sm-4">
                                         <label for="" class="form-label">Sub-Status<span
                                                 class="text-danger">*</span></label>
-                                        <select name="sub_status" id="sub-status" class="form-select "
+                                        <select name="sub_status" id="sub-status" required class="form-select "
                                             id="">
                                         </select>
                                     </div>
@@ -303,7 +302,7 @@
                                     <div class="col-sm-12">
                                         <label for="" class="form-label">Sub-Category<span
                                                 class="text-danger">*</span></label>
-                                        <select name="sub_category" id="sub-category" class="form-select select2"
+                                        <select name="sub_category" id="sub-category" required class="form-select select2"
                                             id="">
                                             <option value="">**Please Select Sub-Category</option>
                                             @foreach ($subcategory as $subcat)
@@ -323,7 +322,7 @@
                                     <div class="col-sm-4">
                                         <label for="" class="form-label">Consultant Name<span
                                                 class="text-danger">*</span></label>
-                                        <select name="deal_with" class="form-select" id="">
+                                        <select name="consultant" required class="form-select" id="consultant">
                                             <option value="">**Please Select Consultant Name..</option>
                                             @foreach ($consultant as $consultant)
                                                 <option value="{{ $consultant->id ?? '' }}">
@@ -336,7 +335,7 @@
                                         <label for="" class="form-label">Deal With<span
                                                 class="text-danger">*</span></label>
 
-                                        <select name="deal_with" class="form-select" id="">
+                                        <select name="deal_with" required class="form-select" id="deal_with">
                                             <option value="">**Please Select Dealler Name..</option>
                                             @foreach ($dealWith as $dealw)
                                                 <option value="{{ $dealw->id ?? '' }}">{{ $dealw->dealler_name ?? '' }}
@@ -353,8 +352,8 @@
                                     </div>
 
                                     <div class="col-sm-6">
-                                        <label for="" class="form-label">Remarks</label>
-                                        <select name="remarks" class="form-select select2" id="">
+                                        <label for="" class="form-label">Remarks<span class="text-danger">*</span> </label>
+                                        <select name="remarks" required class="form-select select2" id="remarks">
                                             <option value="">**Please Select Remarks</option>
                                             @foreach ($remarks as $remark)
                                                 <option value="{{ $remark->id ? $remark->id : '' }}">
@@ -363,8 +362,8 @@
                                         </select>
                                     </div>
                                     <div class="col-sm-6 ">
-                                        <label for="" class="form-label">Client Remarks</label>
-                                        <select name="client_remarks" class="form-control select2 " id="">
+                                        <label for="" class="form-label">Client Remarks<span class="text-danger">*</span> </label>
+                                        <select name="client_remarks" required class="form-control select2 " id="client_remarks">
                                             <option value="">**Please Select Remarks</option>
                                             @foreach ($clientRemarks as $cleintRemark)
                                                 <option value="{{ $cleintRemark->id ? $cleintRemark->id : '' }}">
@@ -388,7 +387,7 @@
                                     </div>
                                     <div class="col-sm-4">
                                         <label for="" class="form-label">Evidence Last Date</label>
-                                        <input type="text" name="evidence_last_date" class="form-control datepicker"
+                                        <input type="text" name="evidence_last_date" value="{{ old('evidence_last_date') }}" class="form-control datepicker"
                                             placeholder="Please Enter Evidence last Date...">
                                     </div>
                                     <div class="col-sm-4">
@@ -407,23 +406,32 @@
                                     <div class="col-sm-8">
                                         <label for="" class="form-label">Email Remarks</label>
                                         <textarea class="form-control" name="email_remarks" placeholder="Please Enter Client Email Remarks..."
-                                            id="" cols="1" rows="1"></textarea>
+                                            id="" cols="1" rows="1">{{old('email_remarks')}}</textarea>
 
                                     </div>
 
                                     <div class="col-sm-12">
                                         <label for="" class="form-label">Client Communication</label>
                                         <textarea class="form-control" name="client_communication"
-                                            placeholder="Please Enter Client Communication Feedback Here..." id="" cols="2" rows="2"></textarea>
+                                            placeholder="Please Enter Client Communication Feedback Here..." id="" cols="2" rows="2">{{old('client_communication')}}</textarea>
                                     </div>
 
                                 </div>
                             </fieldset>
                             <div class="row mt-3">
-                                <div class="col-lg-12 d-flex justify-content-end">
-                                    <input type="reset" value="Reset" class="btn me-2 btn-danger px-3 py-1">
-                                    <input type="submit" value="Submit" class="btn btn-primary px-3 py-1">
+                                <div class="col-lg-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" id="confirmCheck">
+                                        <label class="form-check-label fs-12" for="flexCheckDefault">
+                                            <span class="text-danger">*</span> Please complete the form and click on the checkbox to confirm your submission.
+                                        </label>
+                                      </div>
                                 </div>
+                                <div class="col-sm-6  d-flex justify-content-end">
+                                    <input type="reset" value="Reset" class="btn me-2 btn-danger px-3 py-2">
+                                    <input type="submit" value="Submit" id="submitRegistrationForm" class="btn btn-primary px-3 py-2">
+                                </div>
+                            </div>
                             </div>
                         </form>
                     @elseif($category->category_slug === 'copyright')
@@ -458,6 +466,25 @@
     </script>
     {{-- script section statr here --}}
 
+    {{-- script for the validations --}}
+    <script type="text/javascript">
+    document.getElementById("registrationTrademarkForm").addEventListener("submit", function (event) {
+        const selectBoxIds = ["office_id", "trademarkclass", "status",'sub-status','sub-category','consultant','deal_with','remarks','client_remarks']; 
+        if (!validateSelectBoxes(selectBoxIds)) {
+            event.preventDefault(); 
+        }
+    });
+
+    $(document).ready(function () {
+    const checkbox = $('#confirmCheck');
+    const trademarkFormSubmit = $('#submitRegistrationForm');
+    trademarkFormSubmit.prop('disabled', !checkbox.is(':checked'));
+    checkbox.on('change', function () {
+        trademarkFormSubmit.prop('disabled', !this.checked);
+    });
+});
+
+    </script>
 
     {{-- dynamic options code here on change status much more --}}
     <script type="text/javascript">

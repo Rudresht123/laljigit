@@ -146,7 +146,7 @@ function populateDatalist(data) {
 }
 
 // sub status
-function populateSubstatus(route, selectedSlug = null) {
+function populateSubstatus(route, substatusId = null) {
     $.ajax({
         url: route,
         type: 'GET',
@@ -156,7 +156,7 @@ function populateSubstatus(route, selectedSlug = null) {
             select.append(`<option value="">**Please Select Sub Status..</option>`);
             response.forEach(substatus => {
                 // Check if this substatus should be selected
-                let isSelected = selectedSlug && substatus.slug === selectedSlug ? 'selected' : '';
+                let isSelected = substatusId && substatus.id === substatusId ? 'selected' : '';
                 let option = `
                     <option value="${substatus.id}" data-slug="${substatus.slug}" ${isSelected}>
                         ${substatus.substatus_name}
@@ -174,6 +174,24 @@ function populateSubstatus(route, selectedSlug = null) {
             console.error('Failed to fetch substatus');
         }
     });
+}
+
+
+// function for the registration form select box validation
+function validateSelectBoxes(selectBoxIds) {
+    let isValid = true;
+    for (let id of selectBoxIds) {
+        const selectBox = document.getElementById(id);
+
+        if (selectBox && !selectBox.value) {
+            isValid = false;
+            selectBox.focus();
+            alert(`Please select an option for ${id}`);
+            break;
+        }
+    }
+
+    return isValid;
 }
 
 

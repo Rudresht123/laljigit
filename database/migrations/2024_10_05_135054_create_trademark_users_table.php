@@ -67,6 +67,16 @@ return new class extends Migration
             ->on('consultant')
             ->onDelete('restrict');
 
+            // dynamic fileds vcolumn start here
+            $table->date('objected_hearing_date')->nullable();
+            $table->string('opponenet_applicant_name')->nullable();
+            $table->string('opponent_applicant')->nullable();
+            $table->string('opponent_applicant_code')->nullable();
+            $table->date('hearing_date')->nullable();
+            $table->string('rectification_no')->nullable();
+            $table->string('opposed_no')->nullable();
+            $table->string('examination_report')->nullable();
+            // dynamic fileds vcolumn start here
 
             $table->unsignedBigInteger('deal_with');
             $table->foreign('deal_with')

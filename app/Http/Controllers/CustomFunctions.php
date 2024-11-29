@@ -30,7 +30,7 @@ class CustomFunctions extends Controller
             'status:id,status_name',
             'subStatus:id,substatus_name',
             'clientRemark:id,client_remarks',
-            'remark:id,remarks',
+            'remarks:id,remarks',
             'consultant:id,consultant_name',
             'status:id,status_name' // Ensure this is included for 'status'
         ]);
@@ -157,9 +157,9 @@ class CustomFunctions extends Controller
         }
     
         // Fetch client details based on clientId, categoryId, and categorySlug
-        if ($request->input('categorySlug') == 'trademark') {
+        if($request->input('categorySlug') == 'trademark') {
             $clientDetails = TrademarkUserModel::with('mainCategory:id,category_name,category_slug') // Eager load only necessary fields
-    ->where('id', $request->input('clientId')) // Apply the condition on trademark_users.id
+    ->where('id', $request->input('clientId')) 
     ->where('category_id', $request->input('categoryId')) // Apply the condition on trademark_users.category_id
     ->first();
 
