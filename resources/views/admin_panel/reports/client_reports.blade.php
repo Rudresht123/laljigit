@@ -161,7 +161,7 @@
             <div class="panel-body pd-b-0 row">
                 <div class="col-lg-12 vhr">
                     <div class="table-responsive">
-                        <table id="example2" class="table w-100 fs-10 ">
+                        <table id="clientTable" class="table w-100 fs-10 ">
                             <thead class="bg-light fw-bold">
                                 <tr class="py-3">
                                     <th class="fw-bold">Sr. No</th>
@@ -177,30 +177,9 @@
                             </thead>
                             <tbody>
 
-                                {{-- @foreach ($statuss as $status)
-                                    <tr>
-                                        <td>{{++$counter}}</td>
-                                        <td>{{$status->status_name ? $status->status_name : ''}}</td>
-                                        <td>{{$status->remark ? $status->remark : ''}}</td>
-                                        <td>{!!$status->status=='yes' ? '<span class="bg-success rounded text-light px-1">Active</span>' : '<span class="bg-danger rounded text-light px-1">De-Active</span>'!!}</td>
-                                        <td class="d-flex justify-content-center">
-                                            <a href="" class="editButton" data-id="{{ $status->id }}"
-                                                class="text-primary p-1 rounded fw-bold "><i class="far fa-edit"></i></a>
-                                            <a href="" data-id="{{ $status->id }}"
-                                                class="deletebutton text-danger p-1 rounded fw-bold "><i
-                                                    class="fa fa-trash"></i></a>
-                                        </td>
-                                    
-                                    </tr>
-                                @endforeach --}}
-
                             </tbody>
 
                         </table>
-                        {{-- {{ $statuss->links('pagination::bootstrap-5') }} --}}
-                    </div>
-                    <div id="paginationLinks">
-
                     </div>
                 </div>
             </div>
@@ -225,7 +204,7 @@
                     <form id="editSubstatusFormForClients" method="POST">
                         @csrf
                         <fieldset class="form-fieldset">
-                            <legend>Update Status</legend>
+                            <legend id="clientFileName"></legend>
                             <div class="form-group">
                                 <label for="" class="form-label">ClientId</label>
                                 <input type="text" name="clientId" class="form-control">
@@ -394,124 +373,7 @@
                     }
                 });
             });
-            $(document).ready(function() {
-    // Handle form submit for filtering
-    // $('#fillterFormData').on('submit', function(e) {
-    //     e.preventDefault();
-    //     fetchFilteredData($(this).serialize());
-    // });
-
-    // Handle pagination link clicks
-    // $(document).on('click', '#paginationLinks a', function(e) {
-    //     e.preventDefault();
-    //     let page = $(this).attr('href').split('page=')[1];
-    //     let formData = $('#fillterFormData').serialize() + '&page=' + page;
-    //     fetchFilteredData(formData);
-    // });
-
-    // function fetchFilteredData(formData) {
-    //     // Show loader and overlay
-    //     $('#ld').show();
-    //     $('#overlay').show();
-
-    //     $.ajax({
-    //         headers: {
-    //             'X-CSRF-TOKEN': '{{ csrf_token() }}'
-    //         },
-    //         url: "{{ route('admin.getFiellterClientsData') }}",
-    //         type: "POST",
-    //         data: formData,
-    //         cache: false,
-    //         success: function(response) {
-    //             $('#ld').hide();
-    //             $('#overlay').hide();
-
-    //             console.log(response); // For debugging
-
-    //             // Clear existing table data
-    //             $('#clientTable tbody').empty();
-
-    //             if (response.data.length === 0) {
-    //                 $('#clientTable tbody').append(
-    //                     '<tr><td colspan="10" class="text-center">No data found</td></tr>'
-    //                 );
-    //             } else {
-    //                 let counter = 0;
-    //                 response.data.forEach(function(item) {
-    //                     let clientPdfLink = '{{ route('admin.client-details.print-pdf', ['category_slug' => '__CATEGORY_SLUG__', 'application_no' => '__APPLICATION_NO__']) }}';
-    //                     clientPdfLink = clientPdfLink.replace('__CATEGORY_SLUG__', item.main_category.category_slug).replace('__APPLICATION_NO__', item.application_no);
-
-    //                     let clientDetailsLink = '{{ route('admin.attorney.clientDetails', ['category_slug' => '__CATEGORY_SLUG__', 'application_no' => '__APPLICATION_NO__']) }}';
-    //                     clientDetailsLink = clientDetailsLink.replace('__CATEGORY_SLUG__', item.main_category.category_slug).replace('__APPLICATION_NO__', item.application_no);
-
-    //                     $('#clientTable tbody').append(`
-    //                         <tr>
-    //                             <td>${++counter}</td>
-    //                             <td>${item.application_no}</td>
-    //                             <td>${item.file_name}</td>
-    //                             <td>${item.trademark_name}</td>
-    //                             <td>${item.phone_no}</td>
-    //                             <td>${item.email_id}</td>
-    //                             <td>${item.opponenet_applicant_name}</td>
-    //                             <td>${item.valid_up_to}</td>
-    //                             <td>${item.status.status_name}</td>
-    //                             <td>${item.consultant_name}</td>
-    //                             <td>${item.filed_by}</td>
-    //                             <td>
-    //                                 <div class="dropdown dropstart">
-    //                                     <button class="btn btn-secondary p-1 dropdown-toggle" type="button" id="dropleftMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    //                                         <i class="typcn typcn-th-small"></i>
-    //                                     </button>
-    //                                     <div class="dropdown-menu" aria-labelledby="dropleftMenuButton">
-    //                                         <h6 class="dropdown-header tx-uppercase tx-12 tx-bold tx-inverse">Clients Actions</h6>
-    //                                         <button class="dropdown-item editStatus" id="editStatus" data-id='${item.id}' data-category-id='${item.main_category.id}' data-category-slug='${item.main_category.category_slug}' >
-    //                                             <i class="typcn typcn-cog-outline"></i><span class="fs-13">Edit Status</span>
-    //                                         </button>
-    //                                         <a target="_blank" class="dropdown-item" href="${clientPdfLink}">
-    //                                             <i class="typcn typcn-document-add"></i><span class="fs-13">PDF Print</span>
-    //                                         </a>
-    //                                         <a class="dropdown-item" href="${clientDetailsLink}">
-    //                                             <i class="typcn typcn-edit"></i><span class="fs-13">Client Details</span>
-    //                                         </a>
-    //                                     </div>
-    //                                 </div>
-    //                             </td>
-    //                         </tr>
-    //                     `);
-    //                 });
-    //                 $('#paginationLinks').html(response.pagination);
-    //             }
-    //         },
-    //         error: function(xhr) {
-    //             $('#ld').hide();
-    //             $('#overlay').hide();
-    //             if (xhr.status === 422) {
-    //                 const errors = xhr.responseJSON.errors;
-    //                 let errorMessages = '<ul>';
-    //                 for (const field in errors) {
-    //                     errorMessages += '<li>' + errors[field][0] + '</li>';
-    //                 }
-    //                 errorMessages += '</ul>';
-    //                 Swal.fire({
-    //                     title: 'Validation Errors',
-    //                     html: errorMessages,
-    //                     icon: 'error',
-    //                     confirmButtonText: 'Okay'
-    //                 });
-    //             } else {
-    //                 Swal.fire({
-    //                     title: 'Error',
-    //                     text: 'An error occurred: ' + xhr.responseText,
-    //                     icon: 'error',
-    //                     confirmButtonText: 'Okay'
-    //                 });
-    //                 console.error(xhr);
-    //             }
-    //         }
-    //     });
-    // }
-});
-        });
+         });
     </script>
     {{-- edit status start here --}}
     <script type="text/javascript">
@@ -558,6 +420,8 @@
                                 $('select[name="clientstatus"]').val(response.clientDetails
                                     .sub_category);
                             }
+                            $('#clientFileName').text(response.clientDetails
+                            .)
                             $('#editStatusModal').modal(
                             'show'); // Show modal after populating the form
                         } else {

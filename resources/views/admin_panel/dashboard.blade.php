@@ -116,14 +116,14 @@
                                                         <tr>
                                                             <td>
                                                                 <a href="{{ route('admin.attorney.clientDetails', ['category_slug' => $groupdata->category_slug, 'application_no' => $groupdata->application_no]) }}">
-                                                                    {{ $groupdata->application_no }}
+                                                                    {{ $groupdata->application_no  ?? ''}}
                                                                 </a>
                                                             </td>
                                                             <!-- Placeholder for profile image -->
-                                                            <td>{{ $groupdata->file_name }}</td>
-                                                            <td>{{ $groupdata->trademark_name }}</td>
-                                                            <td>{{ $groupdata->phone_no }}</td>
-                                                            <td>{{ $groupdata->subcategory }}</td>
+                                                            <td>{{ $groupdata->file_name ?? '' }}</td>
+                                                            <td>{{ $groupdata->trademark_name  ?? ''}}</td>
+                                                            <td>{{ $groupdata->phone_no ?? '' }}</td>
+                                                            <td>{{ $groupdata->subcategory ?? '' }}</td>
                                                         </tr>
                                                         @endif
                                                         @endforeach
@@ -332,7 +332,7 @@
                 <form id="editSubstatusFormForClients" method="POST">
                     @csrf
                     <fieldset class="form-fieldset">
-                        <legend>Update Status</legend>
+                        <legend id="clientFileName">Update Status</legend>
                         <div class="form-group">
                             <label for="" class="form-label">ClientId</label>
                             <input type="text" readonly name="clientId" class="form-control">
@@ -343,7 +343,7 @@
                         </div>
                         <div class="form-group">
                             <label for="" class="form-label">Category</label>
-                            <select disabled name="updateStatusMainCategory" id="" class="form-select">
+                            <select  name="updateStatusMainCategory" id="" class="form-select">
                                 @foreach ($mcategories as $mcat)
                                 <option value="{{ $mcat->id }}">{{ $mcat->category_name }}</option>
                                 @endforeach
@@ -414,12 +414,13 @@
                     if (response.clientDetails) {
                         // Set form values based on response
                         $('input[name="clientId"]').val(response.clientDetails.id);
-                        $('input[name="main_category_slug"]').val(response.clientDetails.main_category_slug);
+                        $('input[name="main_category_slug"]').val(category_slug);
 
                         $('select[name="updateStatusMainCategory"]').val(response.clientDetails.category_id);
                         if (response.clientDetails.sub_category) {
                             $('select[name="clientstatus"]').val(response.clientDetails.sub_category);
                         }
+                        $('#clientFileName').text(response.clientDetails.file_name)
                         $('#editStatusModal').modal('show'); // Show modal after populating the form
                     } else {
                         console.error('Unexpected response structure:', response);

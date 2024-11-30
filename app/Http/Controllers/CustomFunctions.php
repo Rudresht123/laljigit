@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
 
+
 class CustomFunctions extends Controller
 {
     public function getSubStatus($id)
@@ -21,7 +22,7 @@ class CustomFunctions extends Controller
         }
     }
     public function getClients(Request $request)
-    {
+    {  Log::info('Request Parameters:', $request->all());
         // Define the query with the required relationships
         $query = TrademarkUserModel::with([
             'attorney:id,attorneys_name',
@@ -87,8 +88,14 @@ class CustomFunctions extends Controller
         $length = $request->input('length', 10);
         $start = $request->input('start', 0);
     
+        Log::info($length);
+        // Get the filtered records count before applying pagination
         $filteredRecords = $query->count();
+    
+        // Apply pagination
         $data = $query->skip($start)->take($length)->get();
+    
+        // Total records in the database
         $totalRecords = TrademarkUserModel::count();
     
         // Format the data
@@ -104,14 +111,14 @@ class CustomFunctions extends Controller
                 'opponenet_applicant_name' => $item->opponenet_applicant_name,
                 'valid_up_to' => $item->valid_up_to,
                 'status' => $item->status->status_name ?? 'Not Filed',
-                'filed_by' => $item->filed_by ?? '', // Ensure 'mainstatus' relation is loaded
+                'filed_by' => $item->filed_by ?? ' ',
                 'actions' => '<div class="dropdown dropstart">
                                 <button class="btn btn-secondary p-1 dropdown-toggle" type="button" data-bs-toggle="dropdown">
                                     <i class="typcn typcn-th-small"></i>
                                 </button>
                                 <div class="dropdown-menu">
                                     <button class="dropdown-item editStatus" data-id="' . $item->id . '" data-category-id="' . $item->mainCategory->id . '" data-category-slug="' . $item->mainCategory->category_slug . '">
-                                        <i class="typcn typcn-cog-outline"></i> Edit Status
+                                        <i class="typcn typcn-edit"></i> Edit Status
                                     </button>
                                     <a target="_blank" class="dropdown-item" href="' . route('admin.client-details.print-pdf', [
                                         'category_slug' => $item->mainCategory->category_slug,
@@ -119,14 +126,18 @@ class CustomFunctions extends Controller
                                     ]) . '">
                                         <i class="typcn typcn-document-add"></i> PDF Print
                                     </a>
-
-                                      <a target="_blank" class="dropdown-item" href="' . route('admin.status.client-status', [
+                                 
+                                     <a target="_blank" class="dropdown-item" href="' . route('admin.status.UpdateStatusConditionalFields', [
+                                        'slug' => $item->mainCategory->category_slug,
+                                        'application_no' => $item->application_no
+                                    ]) . '">
+                                        <i class="typcn typcn-edit"></i> Update Status
+                                    </a>
+                                    <a target="_blank" class="dropdown-item" href="' . route('admin.status.client-status', [
                                         'application_no' => $item->application_no
                                     ]) . '">
                                         <i class="typcn typcn-document-add"></i> Status Details
                                     </a>
-
-                                    
                                     <a class="dropdown-item" href="' . route('admin.attorney.clientDetails', [
                                         'category_slug' => $item->mainCategory->category_slug,
                                         'application_no' => $item->application_no
@@ -141,11 +152,12 @@ class CustomFunctions extends Controller
         // Return JSON response for DataTables
         return response()->json([
             'draw' => intval($request->input('draw')),
-            'recordsTotal' => $totalRecords,
-            'recordsFiltered' => $filteredRecords,
-            'data' => $formattedData
+            'recordsTotal' => $totalRecords,        // Total records in DB
+            'recordsFiltered' => $filteredRecords, // Records after filtering
+            'data' => $formattedData,              // Current page's data
         ]);
     }
+    
     
     
     public function getClientDetailsForUpdateStatus(Request $request)
@@ -278,7 +290,7 @@ class CustomFunctions extends Controller
     
     //client details of search
     public function searchClientDetails(Request $request)
-{
+    {
     $application_no = $request->input('application_no');
     
     // Perform some action, then redirect to client details page
@@ -290,7 +302,13 @@ class CustomFunctions extends Controller
         'category_slug' => 'trademark',
         'application_no' => $application_no
     ]);
-}
+    }
+
+    // update client status based on conditional fields
+    public function getUpdateStatusConditionalFields($slug,$application_no){
+        echo $application_no;
+        echo $slug;
+    }
  
     
     

@@ -17,6 +17,7 @@ class TrademarkUserModel extends Model
         'file_name',
         'trademark_name',
         'trademark_class',
+        'opposition_no',
         'filling_date',
         'phone_no',
         'email_id',
@@ -107,6 +108,6 @@ class TrademarkUserModel extends Model
     }
     public function statusHistories()
 {
-    return $this->hasMany(StatusHistory::class, 'application_no', 'application_no');
+    return $this->belongsTo(StatusHistory::class, 'application_no', 'application_no');
 }
 }

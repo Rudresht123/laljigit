@@ -29,4 +29,8 @@ Route::post('/admin/get/search-cleint-details',[CustomFunctions::class,'searchCl
 
 
 // Status History Column start here
-ROute::get('admin/client/status-history/{application_no}',[StatusHistoryController::class,'getStatusHistory'])->name('admin.status.client-status')->middleware(['auth','verified']);
+Route::get('admin/client/status-history/{application_no}',[StatusHistoryController::class,'getStatusHistory'])->name('admin.status.client-status')->middleware(['auth','verified']);
+
+
+// Update status Controller For The Main Status With Dynamic COnditional Fields
+Route::get('admin/{slug}/client/update-status/{application_no}',[CustomFunctions::class,'getUpdateStatusConditionalFields'])->name('admin.status.UpdateStatusConditionalFields')->middleware(['auth','verified']);

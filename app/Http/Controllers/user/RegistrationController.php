@@ -280,9 +280,6 @@ class RegistrationController extends Controller
 
     public function updateClientDetails($applicationno, Request $request)
     {
-
-       
-        // Validate the incoming request
         $request->validate([
             'attorney_id' => 'required',
             'category_id' => 'required',
@@ -331,7 +328,7 @@ class RegistrationController extends Controller
     
         $TrademarkUser->fill($request->all());
         $status = $request->input('status');
-        $this->handleStatusLogic($TrademarkUser, $status, $request);
+        handleStatusLogic($TrademarkUser, $status, $request);
     
         // Set financial year from session
         $financialYearId = Session::get('id', null);
@@ -342,7 +339,7 @@ class RegistrationController extends Controller
     
         // Update and handle response
         if ($TrademarkUser->update()) {
-            $this->updateStatusHistory($applicationno, $request->input('status'), $request->input('sub_status'));
+            updateStatusHistory($applicationno, $request->input('status'), $request->input('sub_status'),$request->input('file_name'));
             return redirect()->back()->with(['success' => 'User updated successfully']);
         } else {
             \Log::error('Failed to update TrademarkUser', ['data' => $TrademarkUser->toArray()]);
@@ -354,84 +351,18 @@ class RegistrationController extends Controller
     /**
      * Handle status-specific logic
      */
-    private function handleStatusLogic($TrademarkUser, $status, $request)
-    {
-        switch ($status) {
-            case 8:
-                $TrademarkUser->rectification_no = $request->input('rectification_no');
-                $TrademarkUser->opposed_no = null;
-                $this->handleOpponentApplicant($TrademarkUser, $request);
-                break;
-    
-            case 7:
-                $TrademarkUser->rectification_no = null;
-                $TrademarkUser->opposed_no = $request->input('opposed_no');
-                $this->handleOpponentApplicant($TrademarkUser, $request);
-                break;
-    
-            case 6:
-                $sub_status = $request->input('sub_status');
-                if($sub_status == 15) {
-                    $TrademarkUser->examination_report = $request->input('examination_report');
-                } elseif($sub_status == 2) {
-                    $TrademarkUser->hearing_date = $request->input('hearing_date');
-                }
-                break;
-    
-            default:
-                $this->resetFields($TrademarkUser);
-                break;
-        }
-    }
+   
     
     /**
      * Update status history for the application
      */
-    private function updateStatusHistory($applicationno, $status, $sub_status)
-    {
-        $statusHistory = StatusHistory::where('application_no', $applicationno)->first();
-    
-        if ($statusHistory) {
-            $statusData = json_decode($statusHistory->status_data, true) ?: [];
-            $statusData[] = [
-                'status' => $status,
-                'sub_status' => $sub_status,
-                'date' => now()->toDateTimeString(),
-            ];
-            $statusHistory->update([
-                'status_data' => json_encode($statusData),
-                'updated_at' => now(),
-            ]);
-        }
-    }
-    
+  
 
 /**
  * Handle the opponent applicant data dynamically
  */
-private function handleOpponentApplicant($TrademarkUser, $request)
-{
-    $opponent_applicant = $request->input('opponent_applicant');
-    if ($opponent_applicant == 'Applicant') {
-        $TrademarkUser->opponent_applicant = $opponent_applicant;
-        $TrademarkUser->opponenet_applicant_name = $request->input('opponent_name');
-        $TrademarkUser->opponent_applicant_code = $request->input('opponent_code');
-    } elseif ($opponent_applicant == 'Opponent') {
-        $TrademarkUser->opponent_applicant = $opponent_applicant;
-        $TrademarkUser->opponenet_applicant_name = $request->input('applicant_name');
-        $TrademarkUser->opponent_applicant_code = $request->input('applicant_code');
-    }
-}
-private function resetFields($TrademarkUser)
-{
-    $TrademarkUser->rectification_no = null;
-    $TrademarkUser->opposed_no = null;
-    $TrademarkUser->opponent_applicant = null;
-    $TrademarkUser->opponenet_applicant_name = null;
-    $TrademarkUser->opponent_applicant_code = null;
-    $TrademarkUser->hearing_date = null;
-    $TrademarkUser->examination_report = null;
-}
+
+
 
 
 }

@@ -20,13 +20,15 @@ class DashboardController extends Controller
     public function index()
     {
         $mcategories = MainCategoryModel::where('status', 'yes')->get();
-            $consultant = ConsultantModel::where('status', 'yes')->get();
-            $subcategory = SubcategoryModel::get();
+        $consultant = ConsultantModel::where('status', 'yes')->get();
+        $subcategory = SubcategoryModel::get();
         $attoernyes=AttorneysModel::get();
         $groupedData = DB::table('trademark_users')
-        ->join('sub_category','trademark_users.sub_category','sub_category.id')
+        // ->join('sub_category','trademark_users.sub_category','sub_category.id')
         ->join('main_category','trademark_users.category_id','main_category.id')
         ->get();
+
+      
 
 
         $trademarkuserrenewal = TrademarkUserModel::where('sub_category', 4)

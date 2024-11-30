@@ -110,6 +110,9 @@ return new class extends Migration
             ->on('financial_year')
             ->onDelete('restrict');
             $table->timestamps();
+            $table->string('opposition_no')->nullable();
+            $table->text('post_hearing_remarks')->nullable();
+          
 
             $table->string('ip_field')->nullable();
             $table->date('evidence_last_date')->nullable();

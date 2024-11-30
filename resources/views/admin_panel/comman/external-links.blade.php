@@ -56,9 +56,10 @@
     <script src="https://cdn.ckeditor.com/4.20.1/full/ckeditor.js"></script>
 
     <!-- MDBootstrap CSS -->
-
+ 
 
     <link rel="stylesheet" href="{{ asset('../../assets/css/dashforge.css') }}">
+    <link rel="stylesheet" href="{{ asset('../../assets/css/dashforge.profile.css') }}">
     <link rel="stylesheet" href="{{ asset('../../assets/css/dashforge.demo.css') }}">
     <link rel="stylesheet" href="{{ asset('../../assets/css/dashforge.auth.css') }}">
     <link rel="stylesheet" href="{{ asset('../../assets/css/custom.css') }}">

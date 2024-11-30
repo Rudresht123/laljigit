@@ -77,18 +77,22 @@ function intializeCustomDatatable({ route, csrf, columnsDefinition, tableId, dbt
 // datatable for client reports
 function initializeDataTableGetCLients(route, csrftoken) {
     // Destroy existing DataTable if it exists
-    if ($.fn.dataTable.isDataTable('#example2')) {
-        $('#example2').DataTable().clear().destroy();
+    if ($.fn.dataTable.isDataTable('#clientTable')) {
+        $('#clientTable').DataTable().destroy();
     }
-
+  
     // Initialize DataTable with updated filters
-    $('#example2').DataTable({
-        responsive: true,
-        language: {
-            searchPlaceholder: 'Search...',
-            sSearch: '',
-            lengthMenu: '_MENU_ items/page',
-        },
+    $('#clientTable').DataTable({
+        processing: true,
+        serverSide: true,
+    responsive: true,
+    lengthMenu: [10, 25, 50, 100, 200, 500, 1000, 2000],
+    lengthChange: true,
+    language: {
+        searchPlaceholder: 'Search...',
+        sSearch: '',
+        lengthMenu: '_MENU_ items/page',
+    },
         ajax: {
             url: route,
             type: "POST",
@@ -111,7 +115,7 @@ function initializeDataTableGetCLients(route, csrftoken) {
             }
         },
         columns: [
-            { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: true },
+            { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false },
             { data: 'application_no', name:'application_no' },
             { data: 'file_name', name: 'file_name' },
             { data: 'trademark_name', name: 'trademark_name' },
@@ -120,8 +124,7 @@ function initializeDataTableGetCLients(route, csrftoken) {
             { data: 'filed_by', name: 'filed_by' },
             { data: 'actions', name: 'actions', orderable: false, searchable: false }
         ],
-        order: [[0, 'asc']],
-        lengthMenu: [10, 25, 50, 100, 200, 500, 1000, 2000],
+        order: [[1, 'asc']],
     });
 }
 
