@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Chart\ChartController;
+use App\Http\Controllers\reports\StatusHistoryController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\AdminAuthMiddleware;
 use App\Http\Controllers\CustomFunctions;
@@ -25,3 +26,7 @@ Route::get('/admin/chart/StatusWiseClientCount',[ChartController::class,'statusW
 // Route for the get search client on the dashboar
 Route::post('/admin/get/search_cleint',[CustomFunctions::class,'searchCleint'])->name('get.searchClent')->middleware(['auth','verified']);
 Route::post('/admin/get/search-cleint-details',[CustomFunctions::class,'searchClientDetails'])->name('get.searchClent-detail-dashboard')->middleware(['auth','verified']);
+
+
+// Status History Column start here
+ROute::get('admin/client/status-history/{application_no}',[StatusHistoryController::class,'getStatusHistory'])->name('admin.status.client-status')->middleware(['auth','verified']);

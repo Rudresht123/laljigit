@@ -152,11 +152,11 @@ function populateSubstatus(route, substatusId = null) {
         type: 'GET',
         success: function (response) {
             let select = $('#sub-status');
-            select.empty(); // Clear existing options before appending new ones
+            select.empty(); 
             select.append(`<option value="">**Please Select Sub Status..</option>`);
             response.forEach(substatus => {
                 // Check if this substatus should be selected
-                let isSelected = substatusId && substatus.id === substatusId ? 'selected' : '';
+                let isSelected = substatusId && substatus.id == substatusId ? 'selected' : '';
                 let option = `
                     <option value="${substatus.id}" data-slug="${substatus.slug}" ${isSelected}>
                         ${substatus.substatus_name}

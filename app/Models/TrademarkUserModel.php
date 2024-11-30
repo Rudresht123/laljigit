@@ -105,4 +105,8 @@ class TrademarkUserModel extends Model
     {
         return $this->belongsTo(SubcategoryModel::class, 'deal_with','id');
     }
+    public function statusHistories()
+{
+    return $this->hasMany(StatusHistory::class, 'application_no', 'application_no');
+}
 }

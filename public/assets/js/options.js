@@ -48,7 +48,7 @@ function getOpponentApplicantNameNumber(getvalue, slug) {
     }
 }
 function subStatusHearingDateExaminationReport(slug,substatusSlug) {
-    alert(slug);
+
     if (slug !== 'objected') {
         $('#examination_report_submitted, #hearing_date').css('display', 'none');
         return;

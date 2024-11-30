@@ -119,6 +119,14 @@ class CustomFunctions extends Controller
                                     ]) . '">
                                         <i class="typcn typcn-document-add"></i> PDF Print
                                     </a>
+
+                                      <a target="_blank" class="dropdown-item" href="' . route('admin.status.client-status', [
+                                        'application_no' => $item->application_no
+                                    ]) . '">
+                                        <i class="typcn typcn-document-add"></i> Status Details
+                                    </a>
+
+                                    
                                     <a class="dropdown-item" href="' . route('admin.attorney.clientDetails', [
                                         'category_slug' => $item->mainCategory->category_slug,
                                         'application_no' => $item->application_no
