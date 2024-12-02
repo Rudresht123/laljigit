@@ -250,7 +250,7 @@
         <div class="modal-lg modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Upload Excel File</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Upload Excel File <span class="text-danger"> [Date Format : YYYY-MM-DD]</span></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -283,7 +283,7 @@
 
                                 <div class="col-sm-8 d-flex justify-content-between">
                                     <div class="form-group fw-bold text-primary"><a target="_blank"
-                                            href="{{ asset('assets/excels_formates/trademark_clients.xlsx') }}"><i
+                                            href="{{ asset('assets/excels_formates/trademark_clients_formates.xlsx') }}"><i
                                                 class="fa fa-file-excel" aria-hidden="true"></i> Trademark</a></div>
                                     <div class="form-group fw-bold text-primary"><a target="_blank"
                                             href="javascript:void(0)"><i class="fa fa-file-excel" aria-hidden="true"></i>

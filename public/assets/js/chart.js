@@ -114,7 +114,7 @@ function verticalBarChartFunction(route){
       console.log(response);
         let labels = response.labels;
         let count = response.count;
-        let colors = ['#001737', '#1ce1ac'];
+        let colors = ['#001737', '#1ce1ac','#fad7a0', '#aed6f1','#5dade2','#2ecc71','#bb8fce','#ec7063','#5d6d7e'];
         verticalBarChart(labels, count, colors);
     },
     error: function(xhr, status, error) {

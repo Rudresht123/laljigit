@@ -28,12 +28,11 @@ class CustomFunctions extends Controller
             'attorney:id,attorneys_name',
             'mainCategory:id,category_name,category_slug',
             'office:id,office_name',
-            'status:id,status_name',
+            'statusMain:id,status_name',
             'subStatus:id,substatus_name',
             'clientRemark:id,client_remarks',
             'remarks:id,remarks',
-            'consultant:id,consultant_name',
-            'status:id,status_name' // Ensure this is included for 'status'
+            'Clientonsultant:id,consultant_name',
         ]);
     
         // Apply filters
@@ -98,6 +97,11 @@ class CustomFunctions extends Controller
         // Total records in the database
         $totalRecords = TrademarkUserModel::count();
     
+     // <button class="dropdown-item editStatus" data-id="' . $item->id . '" data-category-id="' . $item->mainCategory->id . '" data-category-slug="' . $item->mainCategory->category_slug . '">
+                                    //     <i class="typcn typcn-edit"></i> Edit Status
+                                    // </button>
+                                    
+                                    
         // Format the data
         $formattedData = $data->transform(function ($item, $index) use ($start) {
             return [
@@ -117,9 +121,7 @@ class CustomFunctions extends Controller
                                     <i class="typcn typcn-th-small"></i>
                                 </button>
                                 <div class="dropdown-menu">
-                                    <button class="dropdown-item editStatus" data-id="' . $item->id . '" data-category-id="' . $item->mainCategory->id . '" data-category-slug="' . $item->mainCategory->category_slug . '">
-                                        <i class="typcn typcn-edit"></i> Edit Status
-                                    </button>
+                                   
                                     <a target="_blank" class="dropdown-item" href="' . route('admin.client-details.print-pdf', [
                                         'category_slug' => $item->mainCategory->category_slug,
                                         'application_no' => $item->application_no
@@ -127,10 +129,7 @@ class CustomFunctions extends Controller
                                         <i class="typcn typcn-document-add"></i> PDF Print
                                     </a>
                                  
-                                     <a target="_blank" class="dropdown-item" href="' . route('admin.status.UpdateStatusConditionalFields', [
-                                        'slug' => $item->mainCategory->category_slug,
-                                        'application_no' => $item->application_no
-                                    ]) . '">
+                                     <a target="_blank" class="dropdown-item" href="' . route('admin.attorney.edit-clientDetails',['attoerny_id'=>$item->attorney_id,'category_slug'=>$item->mainCategory->category_slug,'application_no'=>$item->application_no]) . '">
                                         <i class="typcn typcn-edit"></i> Update Status
                                     </a>
                                     <a target="_blank" class="dropdown-item" href="' . route('admin.status.client-status', [

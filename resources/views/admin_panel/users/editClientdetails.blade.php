@@ -101,7 +101,7 @@
                                             @foreach ($offices as $office)
                                                 <option value="{{ $office->id ? $office->id : '' }}"
                                                     {{ $office->id == $client->office_id ? 'selected' : '' }}>
-                                                    {{ $office->office_name ? $office->office_name : '' }}</option>
+                                                    {{ $office->office_name ??  '' }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -309,7 +309,7 @@
                                     {{-- hearing date --}}
                                     <div class="col-sm-4" id="hearing_date" style="display: none;">
                                         <label for="" class="form-label">Hearing Date..</label>
-                                        <input type="text" value="" class="form-control datepicker"
+                                        <input type="text" value="{{$client->hearing_date ?? ''}}" class="form-control datepicker"
                                             name="hearing_date" placeholder="Please Enter Hearing Date..">
                                     </div>
                                     {{-- hearing date --}}
@@ -490,7 +490,7 @@
                 e.preventDefault();
                 let statusId = $(this).val();
                 let route = "{{ route('getsubstatus', ':id') }}".replace(':id', statusId);
-                populateSubstatus(route, null);
+                populateSubstatus(route, '');
             });
             // on ready initialize substatus
             const statusId = @json($client->status);

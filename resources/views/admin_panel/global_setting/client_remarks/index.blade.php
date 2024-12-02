@@ -309,7 +309,7 @@
                     if (result.isConfirmed) {
                         // Code to perform the action (e.g., delete)
                         let yearId = $(this).data('id');
-                        route = "{{ route('admin.global-setting.delete-remarks', ':id') }}"
+                        route = "{{ route('admin.global-setting.delete-client-remarks', ':id') }}"
                             .replace(':id', yearId);
                         $.ajax({
                             headers: {

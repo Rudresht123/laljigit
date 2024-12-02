@@ -3,8 +3,13 @@ use App\Models\StatusHistory;
 use Illuminate\Support\Facades\Session;
 
 if (!function_exists('updateStatusHistory')) {
-     function updateStatusHistory($applicationno,$file_name, $status, $sub_status)
+     function updateStatusHistory(array $data)
     {
+        
+    $applicationno = $data['application_no'];
+    $status = $data['status'];
+    $sub_status = $data['sub_status'];
+    $fileName = $data['file_name'];
        
         $statusHistory = StatusHistory::where('application_no', $applicationno)->first();
        
@@ -29,6 +34,7 @@ if (!function_exists('updateStatusHistory')) {
                     'sub_status' => $sub_status,
                     'date' => now()->toDateTimeString(),
                 ];
+                
                 $statusHistory->update([
                     'status_history' => json_encode($statusData),
                     'updated_at' => now(),

@@ -3,13 +3,13 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\gloalsetting\FinancialYear;
 use App\Http\Controllers\gloalsetting\UpdateFinancialYear;
-
 use App\Http\Middleware\AdminAuthMiddleware;
 use App\Http\Controllers\gloalsetting\AttorneysController;
 use App\Http\Controllers\gloalsetting\ClientRemarksController;
 use App\Http\Controllers\gloalsetting\MainCategory;
-use App\Http\Controllers\gloalsetting\deallerController;
+use App\Http\Controllers\gloalsetting\DeallerController;
 use App\Http\Controllers\gloalsetting\StatusController;
+use App\Http\Controllers\gloalsetting\ConsultantController;
 use App\Http\Controllers\OfficesController;
 use App\Http\Controllers\SubCategory;
 use App\Http\Controllers\gloalsetting\TradeMarksClasses;
@@ -127,6 +127,7 @@ Route::get('admin/global_setting/cleint-remarks',[ClientRemarksController::class
 Route::post('admin/global_setting/create-client-remarks',[ClientRemarksController::class,'store'])->name('admin.global-setting.create-client-remarks')->middleware(['auth','verified']);
 Route::get('admin/global_setting/edit-client-remarks/{id}',[ClientRemarksController::class,'edit'])->name('admin.global-setting.edit-client-remarks')->middleware(['auth','verified']);
 Route::put('admin/global_setting/edit-client-remarks/{id}',[ClientRemarksController::class,'update'])->name('admin.global-setting.update-client-remarks')->middleware(['auth','verified']);
+Route::delete('admin/global_setting/delete-client-remarks/{id}',[ClientRemarksController::class,'destroy'])->name('admin.global-setting.delete-client-remarks')->middleware(['auth','verified']);
 
 
 // Pdf Controller start here

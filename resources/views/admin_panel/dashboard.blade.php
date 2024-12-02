@@ -85,7 +85,7 @@
                                         onclick="toggleDetails(this)">
                                         <div class="row d-felx">
                                             <div class="col-9 pl-4">
-                                                <b class="fs-13">{{ $attoerny->attorneys_name ? $attoerny->attorneys_name : '' }}</b>
+                                                <b class="fs-10">{{ $attoerny->attorneys_name ? $attoerny->attorneys_name : '' }}</b>
                                             </div>
                                             <div class="col-3 text-center">
                                                 <!-- Assuming 'students' is the relationship -->
@@ -113,7 +113,7 @@
                                                         @php
                                                         ++$counter;
                                                         @endphp
-                                                        <tr>
+                                                        <tr class="fs-10">
                                                             <td>
                                                                 <a href="{{ route('admin.attorney.clientDetails', ['category_slug' => $groupdata->category_slug, 'application_no' => $groupdata->application_no]) }}">
                                                                     {{ $groupdata->application_no  ?? ''}}
@@ -121,9 +121,9 @@
                                                             </td>
                                                             <!-- Placeholder for profile image -->
                                                             <td>{{ $groupdata->file_name ?? '' }}</td>
-                                                            <td>{{ $groupdata->trademark_name  ?? ''}}</td>
+                                                            <td style="word-wrap:nowrap;">{{ $groupdata->trademark_name  ?? ''}}</td>
                                                             <td>{{ $groupdata->phone_no ?? '' }}</td>
-                                                            <td>{{ $groupdata->subcategory ?? '' }}</td>
+                                                            <td>{{ $groupdata->status_name ?? '' }}</td>
                                                         </tr>
                                                         @endif
                                                         @endforeach
@@ -289,9 +289,9 @@
                         </b>
                     </h6>
                 </div>
-                <div class="panel-body pt-0">
-                    <canvas id="chartBar2" class="chart_canvas"></canvas>
-                </div>
+<div class="panel-body pt-0" style="overflow-x: auto; white-space: nowrap;width:100%;">
+    <canvas id="chartBar2" class="chart_canvas"></canvas>
+</div>
             </div>
         </div>
     </div>

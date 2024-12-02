@@ -21,7 +21,7 @@
     @foreach ($mainCategory as $category)
     <div class="col-sm-12 col-lg-4 m-2 m-md-0 text-center">
       <a href="{{route('admin.attorney.user-registration',['attoernyId' => $attorney->id, 'category' => $category->category_slug])}}">
-        <div class="atorney-card card card-body p-3">
+        <div class="atorney-card card card-body p-3 mb-2">
           <div class="d-flex align-items-center">
             <img src="{{ $category->category_icon ? asset('storage/uploads/category_icon/' . $category->category_icon) : asset('assets/img/icons/ipicon.png') }}" 
      style="height:50px;width:50px;" 
