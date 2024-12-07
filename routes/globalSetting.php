@@ -10,6 +10,7 @@ use App\Http\Controllers\gloalsetting\MainCategory;
 use App\Http\Controllers\gloalsetting\DeallerController;
 use App\Http\Controllers\gloalsetting\StatusController;
 use App\Http\Controllers\gloalsetting\ConsultantController;
+use App\Http\Controllers\gloalsetting\ExcelColumnNameController;
 use App\Http\Controllers\OfficesController;
 use App\Http\Controllers\SubCategory;
 use App\Http\Controllers\gloalsetting\TradeMarksClasses;
@@ -71,6 +72,15 @@ Route::post('admin/global_setting/consultant',[ConsultantController::class,'stor
 Route::get('admin/global_setting/consultant/{id}',[ConsultantController::class,'edit'])->name('admin.global-setting.edit-consultant')->middleware(['auth','verified']);
 Route::put('admin/global_setting/consultant/{id}',[ConsultantController::class,'update'])->name('admin.global-setting.update-consultant')->middleware(['auth','verified']);
 Route::delete('admin/global_setting/consultant/{id}',[ConsultantController::class,'destroy'])->name('admin.global-setting.destroy-consultant')->middleware(['auth','verified']);
+
+
+
+// ExcelColumn  Controller
+Route::get('admin/global_setting/excelcolumn',[ExcelColumnNameController::class,'index'])->name('admin.global-setting.excelcolumn')->middleware(['auth','verified']);
+Route::post('admin/global_setting/excelcolumn',[ExcelColumnNameController::class,'store'])->name('admin.global-setting.create-excelcolumn')->middleware(['auth','verified']);
+Route::get('admin/global_setting/excelcolumn/{id}',[ExcelColumnNameController::class,'edit'])->name('admin.global-setting.edit-excelcolumn')->middleware(['auth','verified']);
+Route::put('admin/global_setting/excelcolumn/{id}',[ExcelColumnNameController::class,'update'])->name('admin.global-setting.update-excelcolumn')->middleware(['auth','verified']);
+Route::delete('admin/global_setting/excelcolumn/{id}',[ExcelColumnNameController::class,'destroy'])->name('admin.global-setting.destroy-excelcolumn')->middleware(['auth','verified']);
 
 
 

@@ -200,6 +200,9 @@
 
                             <li class="nav-sub-item"><a href="{{ route('admin.global-setting.dealler') }}"
                                     class="nav-sub-link"><i data-feather="users"></i> Deallers</a></li>
+
+                                    <li class="nav-sub-item"><a href="{{ route('admin.global-setting.excelcolumn') }}"
+                                        class="nav-sub-link"><i data-feather="book-open"></i> Excel Column Name</a></li>
                         </ul>
                     </div>
                 </div><!-- nav-sub -->
