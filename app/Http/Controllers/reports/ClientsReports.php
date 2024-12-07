@@ -4,6 +4,7 @@ namespace App\Http\Controllers\reports;
 
 use App\Http\Controllers\Controller;
 use App\Models\AttorneysModel;
+use App\Models\ExcelColumnNameModel;
 use App\Models\MainCategoryModel;
 use App\Models\ConsultantModel;
 use App\Models\StatusModel;
@@ -20,7 +21,7 @@ class ClientsReports extends Controller
             $mcategories = MainCategoryModel::where('status', 'yes')->get();
             $subcategory = SubcategoryModel::get();
         
-                   $columns = Schema::getColumnListing('trademark_users');
+                   $columns = ExcelColumnNameModel::where('status','yes')->get();
            
             return view('admin_panel.reports.client_reports', compact('attorneys', 'statuss', 'mcategories','subcategory','columns'));
    

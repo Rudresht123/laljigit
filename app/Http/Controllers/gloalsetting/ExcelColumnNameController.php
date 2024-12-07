@@ -21,7 +21,7 @@ class ExcelColumnNameController extends Controller
         $newcolumnname = !empty($columnName) ? array_diff($tableColumns, $columnName) : $tableColumns;
         
         if($newcolumnname){
-        return view('admin_panel.global_setting.excelcolumn_name.index', compact('newcolumnname'));
+        return view('admin_panel.global_setting.excelcolumn_name.index', compact('newcolumnname','columnName'));
     }
     }
 
@@ -88,7 +88,8 @@ class ExcelColumnNameController extends Controller
     public function update(Request $request, string $id)
     {
         $validator = Validator::make($request->all(), [
-            'consultant_name' => 'required|string',
+            'column_name' => 'required|string',
+            'excelcolumn_name' => 'required|string',
             'status' => 'required',
         ]);
     
@@ -99,11 +100,11 @@ class ExcelColumnNameController extends Controller
         }
     
         // Find the record first
-        $updateStatus = ConsultantModel::find($id);
+        $updateStatus = ExcelColumnNameModel::find($id);
     
         if (!$updateStatus) {
             return response()->json([
-                'error' => 'Consultant  not found'
+                'error' => 'ExcelColumn  not found'
             ], 404);  // Return a 404 if the record isn't found
         }
     
@@ -111,9 +112,9 @@ class ExcelColumnNameController extends Controller
         $updateStatus->fill($validator->validated());
     
         if ($updateStatus->save()) {  // Using save() instead of update() to handle new updates
-            return response()->json(['success' => 'Consultant  updated successfully']);
+            return response()->json(['success' => 'ExcelColumn  updated successfully']);
         } else {
-            return response()->json(['error' => 'Consultant  update failed']);
+            return response()->json(['error' => 'ExcelColumn  update failed']);
         }
     }
     
@@ -123,17 +124,17 @@ class ExcelColumnNameController extends Controller
      */
     public function destroy(string $id)
     {
-        $consultant = ConsultantModel::find($id);
+        $consultant = ExcelColumnNameModel::find($id);
 
         if($consultant){
             if($consultant->delete()){  // Using save() instead of update() to handle new updates
-                return response()->json(['success' => 'Consultant  deleted successfully']);
+                return response()->json(['success' => 'ExcelColumn  deleted successfully']);
             } else {
-                return response()->json(['error' => 'Consultant  not deleted successfully']);
+                return response()->json(['error' => 'ExcelColumn  not deleted successfully']);
             }
         }
         else{
-            return response()->json(['error' => 'Consultant  not Find successfully']);
+            return response()->json(['error' => 'ExcelColumn  not Find successfully']);
         }
     }
 }

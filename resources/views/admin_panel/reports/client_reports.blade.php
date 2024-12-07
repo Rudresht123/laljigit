@@ -139,8 +139,8 @@
                                         <label><input type="checkbox" class="select-all"> Select All</label>
                                         @foreach ($columns as $column)
                                         <label>
-                                            <input type="checkbox"  {{ in_array($column, ['application_no', 'file_name', 'trademark_name', 'phone_no', 'email_id', 'filed_by']) ? 'checked' : '' }}  name="column[]" value="{{ $column }}" class="option-checkbox">
-                                            {{ $column }}
+                                            <input type="checkbox"  {{ in_array($column->column_name, ['application_no', 'file_name', 'trademark_name', 'phone_no', 'email_id', 'filed_by','trademark_class','valid_upto']) ? 'checked' : '' }}  name="column[]" value="{{ $column->column_name }}" class="option-checkbox">
+                                            {{ $column->excelcolumn_name }}
                                         </label>
                                     @endforeach
                                     

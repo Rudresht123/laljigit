@@ -4,17 +4,23 @@ namespace App\Exports;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
+use Maatwebsite\Excel\Concerns\WithStyles;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use Maatwebsite\Excel\Concerns\WithColumnWidths;
 
-class ExportExcels implements FromCollection, WithHeadings, WithMapping
+
+class ExportExcels implements FromCollection, WithHeadings, WithMapping, WithStyles, WithColumnWidths
 {
     protected $query;
     protected $columns ;
+    protected $excelColumn;
 
     // Constructor to inject the query object
-    public function __construct($query,$columns)
+    public function __construct($query,$columns,$excelColumn)
     {
         $this->query = $query;
         $this->columns = $columns;
+        $this->excelColumn = $excelColumn;
     }
 
     /**
@@ -32,12 +38,51 @@ class ExportExcels implements FromCollection, WithHeadings, WithMapping
     public function headings(): array
     {
         $columnsArray = [];
-        foreach ($this->columns as $column) {
-            $columnsArray[] = $column;
+        if (is_iterable($this->excelColumn)) {
+            foreach ($this->excelColumn as $excelColumn) {
+                if (in_array($excelColumn->column_name, $this->columns)) {
+                    $columnsArray[] = $excelColumn->excelcolumn_name;
+                }
+            }
         }
         return $columnsArray;
     }
 
+    public function styles(Worksheet $sheet)
+    {
+        return [
+            // Style the header row
+            1 => [
+                'font' => ['bold' => true, 'color' => ['rgb' => 'FFFFFF']],
+                'fill' => ['fillType' => 'solid', 'startColor' => ['rgb' => '4CAF50']],
+                'alignment' => ['horizontal' => 'center'],
+            ],
+        ];
+    }
+    /**
+     * Dynamically calculate column widths
+     */
+    public function columnWidths(): array
+    {
+        $columnWidths = [];
+        $columns = range('A', 'Z'); // Extend this range for more columns
+
+        $headings = $this->headings();
+        $data = $this->collection();
+
+        foreach ($headings as $index => $heading) {
+            $maxLength = strlen($heading);
+
+            foreach ($data as $row) {
+                $value = $row->{$this->columns[$index]} ?? '';
+                $maxLength = max($maxLength, strlen($value));
+            }
+
+            $columnWidths[$columns[$index]] = $maxLength + 5; // Add padding
+        }
+
+        return $columnWidths;
+    }
     /**
      * Map each row to the desired format for Excel
      */
@@ -46,10 +91,8 @@ class ExportExcels implements FromCollection, WithHeadings, WithMapping
         $columnsData = [];
     
         foreach ($this->columns as $column) {
-            $columnsData[$column] = $row->$column ?? ''; // Safely handle undefined attributes
+            $columnsData[$column] = $row->$column ?? ''; 
         }
-    
-        // Map specific relationships to corresponding columns
         if (in_array('office_id', $this->columns)) {
             $columnsData['office_id'] = $row->office->office_name ?? '';
         }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\excels;
 use App\Http\Controllers\Controller;
 use App\Imports\ClientsImport;
 use App\Exports\ExportExcels;
+use App\Models\ExcelColumnNameModel;
 use App\Models\TrademarkUserModel;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -72,8 +73,9 @@ public function ClientsExcelExport(Request $request){
         $query->whereBetween('trademark_users.created_at', [$request->start, $request->from]);
     }
 
+    $excelColumn=ExcelColumnNameModel::where('status','yes')->get();
     $columns = $request->input('column');
-    return Excel::download(new ExportExcels($query,$columns), 'trademark_clients.xlsx');
+    return Excel::download(new ExportExcels($query,$columns,$excelColumn), 'trademark_clients.xlsx');
 }
 }
 

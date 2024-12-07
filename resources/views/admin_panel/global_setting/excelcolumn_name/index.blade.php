@@ -126,8 +126,8 @@
                                     <span class="text-danger">*</span></label>
                                        <select name="column_name" required class="form-select" id="">
                                         <option value="">**Please Select Column Name</option>
-                                        @foreach ($newcolumnname as $column)
-                                            <option value="{{$column}}">{{$column}}</option>
+                                        @foreach ($columnName as $columnname)
+                                            <option value="{{$columnname}}">{{$columnname}}</option>
                                         @endforeach
                                        </select>
                             </div>
@@ -251,8 +251,8 @@
             // Handle Edit Financial Year Form Submission
             $('#editStatus').on('submit', function(e) {
                 e.preventDefault();
-                let statusId = $('#status_id').val(); // Get the year ID again if needed
-                let route = "{{ route('admin.global-setting.update-consultant', ':id') }}".replace(':id',
+                let statusId = $('#excelcolumn_id').val(); // Get the year ID again if needed
+                let route = "{{ route('admin.global-setting.update-excelcolumn', ':id') }}".replace(':id',
                 statusId);
                 let formData = $(this).serialize();
 
