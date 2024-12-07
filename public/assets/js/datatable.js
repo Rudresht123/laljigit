@@ -75,27 +75,116 @@ function intializeCustomDatatable({ route, csrf, columnsDefinition, tableId, dbt
 
 
 // datatable for client reports
-function initializeDataTableGetCLients(route, csrftoken) {
+
+
+
+function initializeDataTableGetClientsAttorneyChartCountStatusWise(route, csrftoken, data) {
     // Destroy existing DataTable if it exists
-    if ($.fn.dataTable.isDataTable('#clientTable')) {
-        $('#clientTable').DataTable().destroy();
-    }
   
+    if ($.fn.dataTable.isDataTable('#clientTableCharCount')) {
+        $('#clientTableCharCount').DataTable().destroy();
+    }
+
     // Initialize DataTable with updated filters
-    $('#clientTable').DataTable({
+    $('#clientTableCharCount').DataTable({
         processing: true,
         serverSide: true,
-    responsive: true,
-    lengthMenu: [10, 25, 50, 100, 200, 500, 1000, 2000],
-    lengthChange: true,
-    language: {
-        searchPlaceholder: 'Search...',
-        sSearch: '',
-        lengthMenu: '_MENU_ items/page',
-    },
+        responsive: true, 
+        lengthMenu: [50, 100, 200, 500, 1000, 2000],
+        lengthChange: true,
+        language: {
+            searchPlaceholder: 'Search...',
+            sSearch: '',
+            lengthMenu: '_MENU_ items/page',
+        },
         ajax: {
             url: route,
             type: "POST",
+            data: data, // Send data to the backend
+            headers: csrftoken,
+            error: function(xhr, error, thrown) {
+                console.error("Ajax error:", xhr.responseText || "Unknown error occurred");
+            }
+        },
+        columns: [
+            { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false },
+            { data: 'application_no', name: 'application_no' },
+            { data: 'file_name', name: 'file_name' },
+            { data: 'trademark_name', name: 'trademark_name' },
+            { data: 'phone_no', name: 'phone_no' },
+            { data: 'email_id', name: 'email_id' },
+            { data: 'filed_by', name: 'filed_by' },
+            { data: 'actions', name: 'actions', orderable: false, searchable: false }
+        ],
+        order: [[1, 'asc']],
+    });
+}
+
+ // datatable for client reports
+function clientData(route, csrftoken) {
+    // Destroy existing DataTable if it exists
+    if ($.fn.dataTable.isDataTable('#clientTable')) {
+        $('#clientTable').DataTable().destroy();
+        $('#clientTable').empty(); // Clear table content
+        $('#clientTable').html('<thead></thead><tbody></tbody>'); // Re-add thead and tbody
+    }
+
+    // Retrieve selected columns
+    var selectedColumns = $('input[name="column[]"]:checked').map(function() {
+        return this.value;
+    }).get();
+
+    // Default columns configuration
+    var columnsConfig = [
+        { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false },
+    ];
+
+    // Ensure at least one column is selected
+    if (selectedColumns.length === 0) {
+        alert('Please select at least one column to display.');
+        return;
+    }
+
+    // Dynamically update table headings and columns configuration
+    var tableHeadings = ['#']; // For the index column
+    selectedColumns.forEach(function(column) {
+        columnsConfig.push({ data: column, name: column });
+        tableHeadings.push(column.charAt(0).toUpperCase() + column.slice(1)); // Capitalize headings
+    });
+
+    // Add Actions column
+    columnsConfig.push({
+        data: 'actions',
+        name: 'actions',
+        orderable: false,
+        searchable: false
+    });
+    tableHeadings.push('Actions');
+
+    // Update <thead> with new headings
+    var theadHtml = '<tr>';
+    tableHeadings.forEach(function(heading) {
+        theadHtml += `<th class="fw-bold bg-light">${heading}</th>`;
+    });
+    theadHtml += '</tr>';
+    $('#clientTable thead').html(theadHtml);
+
+    // Initialize DataTable
+    $('#clientTable').DataTable({
+        processing: true,
+        serverSide: true,
+        responsive: true,
+        lengthMenu: [10, 25, 50, 100, 200, 500, 1000, 2000],
+        lengthChange: true,
+        language: {
+            searchPlaceholder: 'Search...',
+            sSearch: '',
+            lengthMenu: '_MENU_ items/page',
+        },
+        ajax: {
+            url: route,
+            type: "POST",
+            headers: csrftoken,
             data: function(d) {
                 d.attorney_id = $('input[name="attorney_id[]"]:checked').map(function() {
                     return this.value;
@@ -109,22 +198,13 @@ function initializeDataTableGetCLients(route, csrftoken) {
                 d.start_date = $('input[name="start_date"]').val() || null;
                 d.end_date = $('input[name="end_date"]').val() || null;
             },
-            headers: csrftoken,
             error: function(xhr, error, thrown) {
                 console.error("Ajax error:", xhr.responseText || "Unknown error occurred");
             }
         },
-        columns: [
-            { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false },
-            { data: 'application_no', name:'application_no' },
-            { data: 'file_name', name: 'file_name' },
-            { data: 'trademark_name', name: 'trademark_name' },
-            { data: 'phone_no', name: 'phone_no' },
-            { data: 'email_id', name: 'email_id' },
-            { data: 'filed_by', name: 'filed_by' },
-            { data: 'actions', name: 'actions', orderable: false, searchable: false }
-        ],
+        columns: columnsConfig,
         order: [[1, 'asc']],
     });
 }
+
 

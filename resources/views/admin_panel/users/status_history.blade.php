@@ -42,7 +42,8 @@
                                     @endphp
                                     @foreach ($decodedData as $decodeddata)
                                     <div class="timeline-item mb-4">
-                                        <div class="timeline-time fs-10 fw-bold"> {{ \Carbon\Carbon::parse($decodeddata->date)->format('j F Y') ?? '' }}</div>
+                                        <div class="timeline-time fs-10 fw-bold"><p>{{ \Carbon\Carbon::parse($decodeddata->date)->format('j F Y') ?? '' }}</p><p>{{ \Carbon\Carbon::parse($decodeddata->date)->format('H:i:s') ?? '' }}
+</p></div>
                                         <div class="timeline-body">
                                             {{-- status --}}
                                             @foreach ($status as $statusItem)

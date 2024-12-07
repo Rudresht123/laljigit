@@ -26,7 +26,7 @@ class RegistrationController extends Controller
     public function showAttorneyCatgory($id)
     {
         $attorney =AttorneysModel::find($id);
-        $mainCategory = MainCategoryModel::get();
+        $mainCategory = MainCategoryModel::where('status','yes')->get();
 
 
         //Status wise count chart 
@@ -155,38 +155,25 @@ class RegistrationController extends Controller
 
     public function clientsDetails($category_slug, $application_no)
     {
+       
         if ($category_slug === 'trademark') {
-            $clientdetail = TrademarkUserModel::query()
-                ->join('attorneys', 'trademark_users.attorney_id', '=', 'attorneys.id')
-                ->join('main_category', 'trademark_users.category_id', '=', 'main_category.id')
-                ->join('offices', 'trademark_users.office_id', '=', 'offices.id')
-                ->join('status', 'trademark_users.status', '=', 'status.id')
-                ->join('sub_status', 'trademark_users.sub_status', '=', 'sub_status.id')
-                ->join('client_remarks', 'trademark_users.client_remarks', '=', 'client_remarks.id')
-                ->join('remarks', 'trademark_users.remarks', '=', 'remarks.id')
-                ->join('consultant', 'trademark_users.consultant', '=', 'consultant.id')
-                ->join('financial_year', 'trademark_users.financial_year', '=', 'financial_year.id')
-                ->join('sub_category', 'trademark_users.sub_category', '=', 'sub_category.id')
-                ->select(
-                    'trademark_users.*',
-                    'attorneys.attorneys_name as attorney_name',
-                    'main_category.category_name as category_name',
-                    'main_category.category_slug as category_slug',
-                    'offices.office_name as office_name',
-                    'status.status_name as status_name',
-                    'sub_status.substatus_name as sub_status_name',
-                    'sub_category.subcategory as subcategory_name',
-                    'client_remarks.client_remarks as client_remark_name',
-                    'remarks.remarks as remark',
-                    'consultant.consultant_name as consultant_name',
-                    'financial_year.financial_session as financial_session'
-                )
-                ->where('trademark_users.application_no', $application_no)
-                ->first();
+    $clientdetail = TrademarkUserModel::with([
+    'attorney:id,attorneys_name',
+    'mainCategory:id,category_name,category_slug',
+    'office:id,office_name',
+    'statusMain:id,status_name',
+    'subStatus:id,substatus_name',
+    'remarksMain:id,remarks as remarks_name',
+    'clientRemark:id,client_remarks',
+    'Clientonsultant:id,consultant_name',
+    'dealWith:id,dealler_name',
+    'financialYear:id,financial_session',
+    'subCategory:id,subcategory'
+])
+->where('application_no', $application_no)
+->first();
 
 
-
-            // Initialize a flag to check if any filters were applied
             return view('admin_panel.users.clientdetails', compact('clientdetail'));
         }
     }
@@ -339,7 +326,12 @@ class RegistrationController extends Controller
     
         // Update and handle response
         if ($TrademarkUser->update()) {
-            updateStatusHistory($applicationno, $request->input('status'), $request->input('sub_status'),$request->input('file_name'));
+           updateStatusHistory([
+    'application_no' => $applicationno,
+    'status' => $request->input('status'),
+    'sub_status' => $request->input('sub_status'),
+    'file_name' => $request->input('file_name')
+]);
             return redirect()->back()->with(['success' => 'User updated successfully']);
         } else {
             \Log::error('Failed to update TrademarkUser', ['data' => $TrademarkUser->toArray()]);

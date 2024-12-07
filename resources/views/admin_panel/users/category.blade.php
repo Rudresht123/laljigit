@@ -21,7 +21,7 @@
     @foreach ($mainCategory as $category)
     <div class="col-sm-12 col-lg-4 m-2 m-md-0 text-center">
       <a href="{{route('admin.attorney.user-registration',['attoernyId' => $attorney->id, 'category' => $category->category_slug])}}">
-        <div class="atorney-card card card-body p-3">
+        <div class="atorney-card card card-body p-3 mb-2">
           <div class="d-flex align-items-center">
             <img src="{{ $category->category_icon ? asset('storage/uploads/category_icon/' . $category->category_icon) : asset('assets/img/icons/ipicon.png') }}" 
      style="height:50px;width:50px;" 
@@ -47,7 +47,7 @@
                       <b class="fs-12">
                         Total Trademark
                       </b>
-                      <b class="fs-12"><span class="badge text-bg-danger fs-8">{{$totalCount ?? ''}}</span></b>
+                      <b class="fs-12"><span class="badge text-dark fs-14">{{$totalCount ?? ''}}</span></b>
                   </h6>
               </div>
               <div class="panel-body pt-0">
@@ -66,8 +66,19 @@
                     @foreach ($statuswisecount as $clientCount)
                         <tr>
                           <td class="text-center">{{++$count}}</td>
-                          <td>{{$clientCount->status_name ?? ''}}</td>
-                          <td class="text-center"><span class="badge text-bg-danger fs-8">{{$clientCount->usercount ?? ''}}</span></td>
+                          <td class="fs-12">{{$clientCount->status_name ?? ''}}</td>
+                          <td class="text-center">
+                            <span class="fs-10">
+                                <a class="text-primary" 
+                                   href="{{ route('admin.attorney.chart.status-data', [
+                                       'attorney_id' => $attorney->id, 
+                                       'category_slug' => 'trademark', 
+                                       'status_id' => $clientCount->id
+                                   ]) }}">
+                                    {{ $clientCount->usercount ?? '' }}
+                                </a>
+                            </span>
+                        </td>
                         </tr>
                     @endforeach
                   </tbody>

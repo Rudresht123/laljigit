@@ -1,8 +1,6 @@
 <?php
-
 namespace App\Exports;
 
-use App\Models\TrademarkUserModel;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
@@ -10,11 +8,13 @@ use Maatwebsite\Excel\Concerns\WithMapping;
 class ExportExcels implements FromCollection, WithHeadings, WithMapping
 {
     protected $query;
+    protected $columns ;
 
     // Constructor to inject the query object
-    public function __construct($query)
+    public function __construct($query,$columns)
     {
         $this->query = $query;
+        $this->columns = $columns;
     }
 
     /**
@@ -22,7 +22,8 @@ class ExportExcels implements FromCollection, WithHeadings, WithMapping
      */
     public function collection()
     {
-        return $this->query->get();
+    
+       return $this->query->get();
     }
 
     /**
@@ -30,9 +31,11 @@ class ExportExcels implements FromCollection, WithHeadings, WithMapping
      */
     public function headings(): array
     {
-        return [
-            'Attorney Name', 'Category Name', 'Office Name', 'Status', 'Sub Status', 'Client Remarks', 'Remarks', 'Opposition Status', 'Filing Date'
-        ];
+        $columnsArray = [];
+        foreach ($this->columns as $column) {
+            $columnsArray[] = $column;
+        }
+        return $columnsArray;
     }
 
     /**
@@ -40,17 +43,55 @@ class ExportExcels implements FromCollection, WithHeadings, WithMapping
      */
     public function map($row): array
     {
-        return [
-            $row->attorney_name,
-            $row->category_name,
-            $row->office_name,
-            $row->status_name,
-            $row->sub_status_name,
-            $row->client_remark,
-            $row->remark,
-            $row->opposition_status_name,
-            $row->filling_date,
-        ];
+        $columnsData = [];
+    
+        foreach ($this->columns as $column) {
+            $columnsData[$column] = $row->$column ?? ''; // Safely handle undefined attributes
+        }
+    
+        // Map specific relationships to corresponding columns
+        if (in_array('office_id', $this->columns)) {
+            $columnsData['office_id'] = $row->office->office_name ?? '';
+        }
+    
+        if (in_array('category_id', $this->columns)) {
+            $columnsData['category_id'] = $row->category->category_name ?? '';
+        }
+    
+        if (in_array('attorney_id', $this->columns)) {
+            $columnsData['attorney_id'] = $row->attorney->attorneys_name ?? '';
+        }
+    
+        if (in_array('status', $this->columns)) {
+            $columnsData['status'] = $row->statusMain->status_name ?? '';
+        }
+    
+        if (in_array('sub_status', $this->columns)) {
+            $columnsData['sub_status'] = $row->subStatus->substatus_name ?? '';
+        }
+    
+        if (in_array('deal_with', $this->columns)) {
+            $columnsData['deal_with'] = $row->dealWith->dealler_name ?? 'NA';
+        }
+    
+        if (in_array('financial_year', $this->columns)) {
+            $columnsData['financial_year'] = $row->financialYear->financial_session ?? 'NA';
+        }
+    
+        if (in_array('consultant', $this->columns)) {
+            $columnsData['consultant'] = $row->Clientonsultant->consultant_name ?? 'NA';
+        }
+    
+        if (in_array('client_remarks', $this->columns)) {
+            $columnsData['client_remarks'] = $row->clientRemark->client_remarks ?? 'NA';
+        }
+    
+        if (in_array('remarks', $this->columns)) {
+            $columnsData['remarks'] =$item->remarksMain->remarks_name ?? 'NA';
+        }
+    
+        return $columnsData;
     }
-}
+    
 
+}

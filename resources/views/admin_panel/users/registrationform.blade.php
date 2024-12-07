@@ -81,7 +81,7 @@
                             @csrf
                             <fieldset class="form-fieldset">
                                 <legend>Basic Information</legend>
-                                <div class="row p-4">
+                                <div class="row p-0 p-md-4">
 
 
                                     <div class="col-sm-4">
@@ -176,13 +176,7 @@
                                     </div>
 
 
-                                    <div class="col-sm-4">
-                                        <label for="" class="form-label">Opposition Hearing Date<span
-                                                class="text-danger">*</span></label>
-                                        <input type="text" value="{{ old('opposition_hearing_date') }}"
-                                            name="opposition_hearing_date" class="form-control datepicker"
-                                            placeholder="Opposition Hearing Date..">
-                                    </div>
+                                 
 
 
                                     <div class="col-sm-4">
@@ -224,6 +218,16 @@
                                             placeholder="Please Enter Oppose No..">
                                     </div>
                                     {{-- opposed no --}}
+                                    
+                                    <!--opposition hearing data-->
+                                       <div class="col-sm-4" id="opposition_hearing_date" style="display: none;">
+                                        <label for="" class="form-label">Opposition Hearing Date<span
+                                                class="text-danger">*</span></label>
+                                        <input type="text" value="{{ old('opposition_hearing_date') }}"
+                                            name="opposition_hearing_date" class="form-control datepicker"
+                                            placeholder="Opposition Hearing Date..">
+                                    </div>
+                                    <!--opposition hearing date end here-->
 
                                      {{-- rectification no --}}
                                      <div class="col-sm-4" id="rectification_no" style="display: none;">
@@ -273,8 +277,18 @@
                                             name="opponent_code" placeholder="Please Enter Opponent Code..">
                                     </div>
                                     {{-- opponent --}}
-
-
+                                    
+                                    
+                                    
+                                    <!--evidence last date-->
+                                     <div class="col-sm-4" id="evidence_last_date" style="display:none;">
+                                        <label for="" class="form-label">Evidence Last Date</label>
+                                        <input type="text" name="evidence_last_date" value="{{ old('evidence_last_date') }}" class="form-control datepicker"
+                                            placeholder="Please Enter Evidence last Date...">
+                                    </div>
+                                     <!--evidence last date-->
+                                    
+                                    
                                     {{-- examination report --}}
                                     <div class="col-sm-4" id="examination_report_submitted" style="display: none;">
                                         <label for="" class="form-label">Examination Report Submitted</label>
@@ -300,7 +314,7 @@
                                     {{-- conditional components start end --}}
 
                                     <div class="col-sm-12">
-                                        <label for="" class="form-label">Sub-Category<span
+                                        <label for="" class="form-label">Trademark Sub Category<span
                                                 class="text-danger">*</span></label>
                                         <select name="sub_category" id="sub-category" required class="form-select select2"
                                             id="">
@@ -385,11 +399,7 @@
                                         <input type="text" value="{{ $category->category_name }}" name="ip_field"
                                             readonly class="form-control" placeholder="Name Of IP Field...">
                                     </div>
-                                    <div class="col-sm-4">
-                                        <label for="" class="form-label">Evidence Last Date</label>
-                                        <input type="text" name="evidence_last_date" value="{{ old('evidence_last_date') }}" class="form-control datepicker"
-                                            placeholder="Please Enter Evidence last Date...">
-                                    </div>
+                                   
                                     <div class="col-sm-4">
                                         <label for="" class="form-label">Email Recived Date</label>
                                         <input type="text" value="{{ old('email_recived_date') }}"

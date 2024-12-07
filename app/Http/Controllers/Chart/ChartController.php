@@ -14,7 +14,7 @@ class ChartController extends Controller
        $userCount=TrademarkUserModel::count();
         $chartData = [
             'labels' => ['Trademark','Copyright','Design'],
-            'userCount' => [$userCount,6,3]
+            'userCount' => [$userCount,0,0]
         ];
 
         if($chartData){

@@ -1,15 +1,18 @@
 function getOpptionsforStatus(slug) {
     // Reset visibility of all elements
    
-    $('#opposed_no, #rectification_no, #opponent_applicant, #applicant_name, #applicant_code, #opponent_name, #opponent_code,#examination_report_submitted,#hearing_date').css('display', 'none');
+    $('#opposed_no, #rectification_no, #opponent_applicant, #applicant_name, #applicant_code, #opponent_name, #opponent_code,#examination_report_submitted,#hearing_date,#opposition_hearing_date,#evidence_last_date').css('display', 'none');
 
     // Adjust visibility based on slug
     if (slug === 'opposed') {
         $('#opposed_no').css('display', 'block');
         $('#opponent_applicant').css('display', 'block');
+        $('#opposition_hearing_date').css('display', 'block');
+        $('#evidence_last_date').css('display', 'block');
     } else if (slug === 'rectification_field') {
         $('#rectification_no').css('display', 'block');
         $('#opponent_applicant').css('display', 'block');
+        $('#opposition_hearing_date').css('display', 'block');
     }
 
     // Bind event listener to #opp_app_name only for relevant slugs

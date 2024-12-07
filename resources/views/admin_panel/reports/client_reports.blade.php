@@ -60,7 +60,7 @@
                         <legend>Filter Data</legend>
                         <div class="row">
                             <!-- Attorney Selection -->
-                            <div class="col-sm-4">
+                            <div class="col-sm-3">
                                 <div class="form-group">
                                     <label class="form-label">Select Attorney</label>
                                     <div class="custom-select">
@@ -80,7 +80,7 @@
                             </div>
 
                             <!-- Main Category Selection -->
-                            <div class="col-sm-4">
+                            <div class="col-sm-3">
                                 <div class="form-group">
                                     <label class="form-label">Select Main Category</label>
                                     <div class="custom-select">
@@ -100,7 +100,7 @@
                             </div>
 
                             <!-- Status Selection -->
-                            <div class="col-sm-4">
+                            <div class="col-sm-3">
                                 <div class="form-group">
                                     <label class="form-label">Select Status</label>
                                     <div class="custom-select">
@@ -120,19 +120,36 @@
                             </div>
 
                             <!-- Unique Date Fields -->
-                            <div class="col-sm-4">
+                            <div class="col-sm-3">
                                 <label class="form-label">Start Date</label>
                                 <input type="text" name="start" value="{{ old('start') }}"
                                     class="form-control datepicker" placeholder="Start Date">
                             </div>
-                            <div class="col-sm-4">
+                            <div class="col-sm-3">
                                 <label class="form-label">End Date</label>
                                 <input type="text" name="from" value="{{ old('from') }}"
                                     class="form-control datepicker" placeholder="End Date">
                             </div>
 
+                            <div class="col-sm-3">
+                                <label class="form-label">Fields Columns</label>
+                                <div class="custom-select">
+                                    <button type="button" class="dropdown-btn">Select options</button>
+                                    <div class="select-items">
+                                        <label><input type="checkbox" class="select-all"> Select All</label>
+                                        @foreach ($columns as $column)
+                                        <label>
+                                            <input type="checkbox"  {{ in_array($column, ['application_no', 'file_name', 'trademark_name', 'phone_no', 'email_id', 'filed_by']) ? 'checked' : '' }}  name="column[]" value="{{ $column }}" class="option-checkbox">
+                                            {{ $column }}
+                                        </label>
+                                    @endforeach
+                                    
+                                    </div>
+                                </div>
+                            </div>
+
                             <!-- Submit Button -->
-                            <div class="col-sm-4 mt-3">
+                            <div class="col-sm-3 mt-3">
                                 <input type="submit" class="btn btn-primary float-center px-4" value="Filter Data">
                             </div>
                         </div>
@@ -162,18 +179,12 @@
                 <div class="col-lg-12 vhr">
                     <div class="table-responsive">
                         <table id="clientTable" class="table w-100 fs-10 ">
-                            <thead class="bg-light fw-bold">
-                                <tr class="py-3">
-                                    <th class="fw-bold">Sr. No</th>
-                                    <th class="fw-bold">Application No</th>
-                                    <th class="fw-bold">File Name</th>
-                                    <th class="fw-bold">Trademark Name</th>
-                                    <th class="fw-bold">Phone No</th>
-                                    <th class="fw-bold">Email</th>
-                                    <th class="fw-bold">Field By</th>
-                                    <th class="fw-bold">Action</th>
-
-                                </tr>
+                            <thead class="border bg-light fw-bold">
+                            <th>Sr.No</th>
+                             <th>Trademark Name</th>
+                              <th>Firl Name</th>
+                               <th>Trademark Class</th>
+                                 <th>Phone No.</th>
                             </thead>
                             <tbody>
 
@@ -250,7 +261,7 @@
         <div class="modal-lg modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Upload Excel File</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Upload Excel File <span class="text-danger"> [Date Format : YYYY-MM-DD]</span></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -283,7 +294,7 @@
 
                                 <div class="col-sm-8 d-flex justify-content-between">
                                     <div class="form-group fw-bold text-primary"><a target="_blank"
-                                            href="{{ asset('assets/excels_formates/trademark_clients.xlsx') }}"><i
+                                            href="{{ asset('assets/excels_formates/trademark_clients_formates.xlsx') }}"><i
                                                 class="fa fa-file-excel" aria-hidden="true"></i> Trademark</a></div>
                                     <div class="form-group fw-bold text-primary"><a target="_blank"
                                             href="javascript:void(0)"><i class="fa fa-file-excel" aria-hidden="true"></i>
@@ -532,7 +543,92 @@
         e.preventDefault(); // Prevent default form submission
         let route = "{{ route('admin.getFiellterClientsData') }}";
         let csrftoken = { 'X-CSRF-TOKEN': '{{ csrf_token() }}' };
-        initializeDataTableGetCLients(route, csrftoken); // Reinitialize DataTable with updated filters
+        clientData(route, csrftoken); // Reinitialize DataTable with updated filters
     });
+function clientData(route, csrftoken) {
+    // Destroy existing DataTable if it exists
+    if ($.fn.dataTable.isDataTable('#clientTable')) {
+        $('#clientTable').DataTable().destroy();
+        $('#clientTable').empty(); // Clear table content
+        $('#clientTable').html('<thead></thead><tbody></tbody>'); // Re-add thead and tbody
+    }
+
+    // Retrieve selected columns
+    var selectedColumns = $('input[name="column[]"]:checked').map(function() {
+        return this.value;
+    }).get();
+
+    // Default columns configuration
+    var columnsConfig = [
+        { data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false },
+    ];
+
+    // Ensure at least one column is selected
+    if (selectedColumns.length === 0) {
+        alert('Please select at least one column to display.');
+        return;
+    }
+
+    // Dynamically update table headings and columns configuration
+    var tableHeadings = ['Sr.No']; // For the index column
+    selectedColumns.forEach(function(column) {
+        columnsConfig.push({ data: column, name: column });
+        tableHeadings.push(column.charAt(0).toUpperCase() + column.slice(1)); // Capitalize headings
+    });
+
+    // Add Actions column
+    columnsConfig.push({
+        data: 'actions',
+        name: 'actions',
+        orderable: false,
+        searchable: false
+    });
+    tableHeadings.push('Actions');
+
+    // Update <thead> with new headings
+    var theadHtml = '<tr>';
+    tableHeadings.forEach(function(heading) {
+        theadHtml += `<th>${heading}</th>`;
+    });
+    theadHtml += '</tr>';
+    $('#clientTable thead').html(theadHtml);
+
+    // Initialize DataTable
+    $('#clientTable').DataTable({
+        processing: true,
+        serverSide: true,
+        responsive: true,
+        lengthMenu: [10, 25, 50, 100, 200, 500, 1000, 2000],
+        lengthChange: true,
+        language: {
+            searchPlaceholder: 'Search...',
+            sSearch: '',
+            lengthMenu: '_MENU_ items/page',
+        },
+        ajax: {
+            url: route,
+            type: "POST",
+            headers: csrftoken,
+            data: function(d) {
+                d.attorney_id = $('input[name="attorney_id[]"]:checked').map(function() {
+                    return this.value;
+                }).get();
+                d.maincategory = $('input[name="maincategory[]"]:checked').map(function() {
+                    return this.value;
+                }).get();
+                d.status = $('input[name="status[]"]:checked').map(function() {
+                    return this.value;
+                }).get();
+                d.start_date = $('input[name="start_date"]').val() || null;
+                d.end_date = $('input[name="end_date"]').val() || null;
+            },
+            error: function(xhr, error, thrown) {
+                console.error("Ajax error:", xhr.responseText || "Unknown error occurred");
+            }
+        },
+        columns: columnsConfig,
+        order: [[1, 'asc']],
+    });
+}
     </script>
 @endsection

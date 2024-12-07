@@ -128,8 +128,19 @@ class SubStatusController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-        //
+  public function destroy(string $id)
+{
+    $status = SubStatusModel::find($id);
+
+    if (!$status) {
+        return response()->json(['error' => 'Sub Status not found'], 404);
     }
+
+    if ($status->delete()) {
+        return response()->json(['success' => 'Sub Status deleted successfully'], 200);
+    }
+
+    return response()->json(['error' => 'Failed to delete Sub Status'], 500);
+}
+
 }

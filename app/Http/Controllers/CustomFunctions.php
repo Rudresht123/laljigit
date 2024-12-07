@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\SubcategoryModel;
 use App\Models\SubStatusModel;
 use App\Models\TrademarkUserModel;
+use App\Models\AttorneysModel;
+use App\Models\StatusModel;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Schema;
@@ -21,19 +23,22 @@ class CustomFunctions extends Controller
             return response()->json($data);
         }
     }
-    public function getClients(Request $request)
-    {  Log::info('Request Parameters:', $request->all());
+ 
+    
+      public function getClients(Request $request)
+    {
         // Define the query with the required relationships
-        $query = TrademarkUserModel::with([
+       $query = TrademarkUserModel::with([
             'attorney:id,attorneys_name',
             'mainCategory:id,category_name,category_slug',
             'office:id,office_name',
-            'status:id,status_name',
+            'statusMain:id,status_name',
             'subStatus:id,substatus_name',
             'clientRemark:id,client_remarks',
-            'remarks:id,remarks',
-            'consultant:id,consultant_name',
-            'status:id,status_name' // Ensure this is included for 'status'
+            'remarksMain:id,remarks as remarks_name',
+            'dealWith:id,dealler_name',
+            'Clientonsultant:id,consultant_name',
+            'financialYear:id,financial_session'
         ]);
     
         // Apply filters
@@ -61,13 +66,14 @@ class CustomFunctions extends Controller
         if ($request->filled('search.value')) {
             $searchValue = trim($request->input('search.value'));
             $query->where(function ($q) use ($searchValue) {
-                $q->where('email_id', 'like', '%' . $searchValue . '%')
-                    ->orWhere('application_no', 'like', '%' . intval($searchValue) . '%')
+                $q->
+                    where('application_no', 'like', '%' . intval($searchValue) . '%')
                     ->orWhere('trademark_name', 'like', '%' . $searchValue . '%')
-                    ->orWhere('file_name', 'like', '%' . $searchValue . '%')
-                    ->orWhere('phone_no', 'like', '%' . $searchValue . '%');
+                    ->orWhere('file_name', 'like', '%' . $searchValue . '%');
             });
         }
+
+        Log::info($query->toRawSql());
     
         // Apply ordering
         if ($request->has('order')) {
@@ -88,7 +94,7 @@ class CustomFunctions extends Controller
         $length = $request->input('length', 10);
         $start = $request->input('start', 0);
     
-        Log::info($length);
+     
         // Get the filtered records count before applying pagination
         $filteredRecords = $query->count();
     
@@ -98,37 +104,46 @@ class CustomFunctions extends Controller
         // Total records in the database
         $totalRecords = TrademarkUserModel::count();
     
+     // <button class="dropdown-item editStatus" data-id="' . $item->id . '" data-category-id="' . $item->mainCategory->id . '" data-category-slug="' . $item->mainCategory->category_slug . '">
+                                    //     <i class="typcn typcn-edit"></i> Edit Status
+                                    // </button>
+                                    
+                                    
         // Format the data
-        $formattedData = $data->transform(function ($item, $index) use ($start) {
-            return [
-                'DT_RowIndex' => $start + $index + 1,
-                'id' => $item->id,
-                'application_no' => $item->application_no,
-                'file_name' => $item->file_name,
-                'trademark_name' => $item->trademark_name,
-                'phone_no' => $item->phone_no, // Include phone_no
-                'email_id' => $item->email_id,
-                'opponenet_applicant_name' => $item->opponenet_applicant_name,
-                'valid_up_to' => $item->valid_up_to,
-                'status' => $item->status->status_name ?? 'Not Filed',
-                'filed_by' => $item->filed_by ?? ' ',
-                'actions' => '<div class="dropdown dropstart">
+
+        $tableColumns=Schema::getColumnListing('trademark_users');
+$formattedData = $data->transform(function ($item, $index) use ($start,$tableColumns) {
+    $rowData = ['DT_RowIndex' => $start + $index + 1]; // Add index
+    
+    foreach ($tableColumns as $tableColumn) {
+            $rowData[$tableColumn] = $item->$tableColumn;
+    }
+      $rowData['attorney_id'] = $item->attorney->attorneys_name ?? '';
+    $rowData['status'] = $item->statusMain->status_name ?? '';
+    $rowData['deal_with'] = $item->dealWith->dealler_name ?? 'NA';
+    $rowData['category_id'] = $item->mainCategory->category_name ?? '';
+    $rowData['financial_year'] = $item->financialYear->financial_session ?? '';
+    $rowData['office_id'] = $item->office->office_name ?? '';
+    $rowData['sub_status'] = $item->subStatus->substatus_name?? '';
+    $rowData['consultant'] = $item->Clientonsultant->consultant_name?? 'NA';
+    $rowData['client_remarks'] = $item->clientRemark->client_remarks?? 'NA';
+    $rowData['remarks'] = $item->remarksMain->remarks_name ?? '';
+  
+    // Add actions (static content)
+    $rowData['actions'] = '<div class="dropdown dropstart">
                                 <button class="btn btn-secondary p-1 dropdown-toggle" type="button" data-bs-toggle="dropdown">
                                     <i class="typcn typcn-th-small"></i>
                                 </button>
                                 <div class="dropdown-menu">
-                                    <button class="dropdown-item editStatus" data-id="' . $item->id . '" data-category-id="' . $item->mainCategory->id . '" data-category-slug="' . $item->mainCategory->category_slug . '">
-                                        <i class="typcn typcn-edit"></i> Edit Status
-                                    </button>
                                     <a target="_blank" class="dropdown-item" href="' . route('admin.client-details.print-pdf', [
                                         'category_slug' => $item->mainCategory->category_slug,
                                         'application_no' => $item->application_no
                                     ]) . '">
                                         <i class="typcn typcn-document-add"></i> PDF Print
                                     </a>
-                                 
-                                     <a target="_blank" class="dropdown-item" href="' . route('admin.status.UpdateStatusConditionalFields', [
-                                        'slug' => $item->mainCategory->category_slug,
+                                    <a target="_blank" class="dropdown-item" href="' . route('admin.attorney.edit-clientDetails', [
+                                        'attoerny_id' => $item->attorney_id,
+                                        'category_slug' => $item->mainCategory->category_slug,
                                         'application_no' => $item->application_no
                                     ]) . '">
                                         <i class="typcn typcn-edit"></i> Update Status
@@ -145,10 +160,11 @@ class CustomFunctions extends Controller
                                         <i class="typcn typcn-edit"></i> Client Details
                                     </a>
                                 </div>
-                            </div>'
-            ];
-        });
-    
+                            </div>';
+
+    // Return the formatted row data
+    return $rowData;
+});
         // Return JSON response for DataTables
         return response()->json([
             'draw' => intval($request->input('draw')),
@@ -266,17 +282,13 @@ class CustomFunctions extends Controller
     public function searchCleint(Request $request) {
         if ($request->input('inputText')) {
             $searchValue = trim($request->input('inputText'));
-
             $query = TrademarkUserModel::where(function ($q) use ($searchValue) {
-                $columns = Schema::getColumnListing('trademark_users');
-                foreach ($columns as $column) {
-                    if ($column === 'firm_name') {
-                        continue;
-                    }
-                    $q->orWhere($column, 'like', '%' . $searchValue . '%');
-                }
+                $q->where('application_no', 'like', '%' . $searchValue . '%')
+                  ->orWhere('file_name', 'like', '%' . $searchValue . '%')
+                  ->orWhere('trademark_name', 'like', '%' . $searchValue . '%');
             })
-            ->select('id', 'application_no','file_name','category_id');
+            ->select('id', 'application_no', 'file_name', 'category_id');
+            
             $results = $query->get();
             if ($results->isEmpty()) {
                 return response()->json(['message' => 'No records found for this search.']);
@@ -309,6 +321,150 @@ class CustomFunctions extends Controller
         echo $application_no;
         echo $slug;
     }
+    
+    
+    
+    // Get CLient Status Attorney Chart Status Wise
+    
+    
+       // show client data according to attoerny count chart
+    public function getAttoernyStatusWiseData($attorneyId,$category,$statusId){
+        $attorney=AttorneysModel::find($attorneyId);
+        $status=StatusModel::find($statusId);
+
+        return view('admin_panel.reports.client_reports_status_wise_chart',compact('attorney','category','status'));
+    }
+    
+      public function getAttoernyChartCountStatusWiseData(Request $request){
+        if($request->input('category_slug') == 'trademark'){
+        $query = TrademarkUserModel::with([
+            'attorney:id,attorneys_name',
+            'mainCategory:id,category_name,category_slug',
+            'office:id,office_name',
+            'statusMain:id,status_name',
+            'subStatus:id,substatus_name',
+            'clientRemark:id,client_remarks',
+             'remarksMain:id,remarks as remarks as remarks_name',
+            'Clientonsultant:id,consultant_name',
+        ]);
+
+      
+        // Apply filters
+        if ($request->filled('attorneyId')) {
+            $query->where('attorney_id', $request->input('attorneyId'));
+        }
+    
+        if ($request->filled('status')) {
+            $query->where('status', $request->input('status'));
+        }
+    
+      // Search functionality
+if ($request->filled('search.value')) {
+    $searchValue = trim($request->input('search.value'));
+   
+    // Apply the search to specific columns
+    $query->where(function ($q) use ($searchValue) {
+        $q->where('application_no', 'like', '%' . intval($searchValue) . '%') // For numeric field
+            ->orWhere('trademark_name', 'like', '%' . $searchValue . '%') // For text field
+            ->orWhere('file_name', 'like', '%' . $searchValue . '%'); // For another text field
+    });
+}
+
+    
+        // Apply ordering
+        if ($request->has('order')) {
+            $order = $request->input('order')[0];
+            $columnIndex = $order['column'];
+            $sortDirection = $order['dir'];
+            $columns = $request->input('columns');
+    
+            if (isset($columns[$columnIndex])) {
+                $columnName = $columns[$columnIndex]['name'];
+                $query->orderBy($columnName, $sortDirection);
+            }
+        } else {
+            $query->orderBy('id', 'asc');
+        }
+    
+        // Pagination parameters
+        $length = $request->input('length', 10);
+        $start = $request->input('start', 0);
+    
+       
+        // Get the filtered records count before applying pagination
+        $filteredRecords = $query->count();
+    
+        // Apply pagination
+        $data = $query->skip($start)->take($length)->get();
+    
+        // Total records in the database
+        $totalRecords = TrademarkUserModel::count();
+    
+     // <button class="dropdown-item editStatus" data-id="' . $item->id . '" data-category-id="' . $item->mainCategory->id . '" data-category-slug="' . $item->mainCategory->category_slug . '">
+                                    //     <i class="typcn typcn-edit"></i> Edit Status
+                                    // </button>
+                                    
+                                    
+        // Format the data
+        $formattedData = $data->transform(function ($item, $index) use ($start) {
+            return [
+                'DT_RowIndex' => $start + $index + 1,
+                'id' => $item->id,
+                'application_no' => $item->application_no,
+                'file_name' => $item->file_name,
+                'trademark_name' => $item->trademark_name,
+                'phone_no' => $item->phone_no, // Include phone_no
+                'email_id' => $item->email_id,
+                'opponenet_applicant_name' => $item->opponenet_applicant_name,
+                'valid_up_to' => $item->valid_up_to,
+                'status' => $item->status->status_name ?? 'Not Filed',
+                'filed_by' => $item->filed_by ?? ' ',
+                'actions' => '<div class="dropdown dropstart">
+                                <button class="btn btn-secondary p-1 dropdown-toggle" type="button" data-bs-toggle="dropdown">
+                                    <i class="typcn typcn-th-small"></i>
+                                </button>
+                                <div class="dropdown-menu">
+                                   
+                                    <a target="_blank" class="dropdown-item" href="' . route('admin.client-details.print-pdf', [
+                                        'category_slug' => $item->mainCategory->category_slug,
+                                        'application_no' => $item->application_no
+                                    ]) . '">
+                                        <i class="typcn typcn-document-add"></i> PDF Print
+                                    </a>
+                                 
+                                     <a target="_blank" class="dropdown-item" href="' . route('admin.attorney.edit-clientDetails',['attoerny_id'=>$item->attorney_id,'category_slug'=>$item->mainCategory->category_slug,'application_no'=>$item->application_no]) . '">
+                                        <i class="typcn typcn-edit"></i> Update Status
+                                    </a>
+                                    <a target="_blank" class="dropdown-item" href="' . route('admin.status.client-status', [
+                                        'application_no' => $item->application_no
+                                    ]) . '">
+                                        <i class="typcn typcn-document-add"></i> Status Details
+                                    </a>
+                                    <a class="dropdown-item" href="' . route('admin.attorney.clientDetails', [
+                                        'category_slug' => $item->mainCategory->category_slug,
+                                        'application_no' => $item->application_no
+                                    ]) . '">
+                                        <i class="typcn typcn-edit"></i> Client Details
+                                    </a>
+                                </div>
+                            </div>'
+            ];
+        });
+    
+        // Return JSON response for DataTables
+        return response()->json([
+            'draw' => intval($request->input('draw')),
+            'recordsTotal' => $totalRecords,  
+            'recordsFiltered' => $filteredRecords, 
+            'data' => $formattedData,       
+        ]);
+    }
+    else{
+        return response()->json([
+            'status'=> 'Not Data Found',
+        ]);
+    }
+    }   
  
     
     

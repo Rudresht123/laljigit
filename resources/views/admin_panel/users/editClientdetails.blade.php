@@ -101,7 +101,7 @@
                                             @foreach ($offices as $office)
                                                 <option value="{{ $office->id ? $office->id : '' }}"
                                                     {{ $office->id == $client->office_id ? 'selected' : '' }}>
-                                                    {{ $office->office_name ? $office->office_name : '' }}</option>
+                                                    {{ $office->office_name ??  '' }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -180,14 +180,7 @@
                                     </div>
 
 
-                                    <div class="col-sm-4">
-                                        <label for="" class="form-label">Opposition Hearing Date<span
-                                                class="text-danger">*</span></label>
-                                        <input type="text"
-                                            value="{{ $client->opposition_hearing_date ? $client->opposition_hearing_date : '' }}"
-                                            name="opposition_hearing_date" class="form-control datepicker"
-                                            placeholder="Opposition Hearing Date..">
-                                    </div>
+                                   
 
 
                                     <div class="col-sm-4">
@@ -241,6 +234,18 @@
                                             placeholder="Please Enter Rectification No..">
                                     </div>
                                     {{-- rectification no --}}
+                                    
+                                    <!--opposition hearing date-->
+                                     <div class="col-sm-4"  id="opposition_hearing_date" style="display: none;">
+                                        <label for="" class="form-label">Opposition Hearing Date<span
+                                                class="text-danger">*</span></label>
+                                        <input type="text"
+                                            value="{{ $client->opposition_hearing_date ? $client->opposition_hearing_date : '' }}"
+                                            name="opposition_hearing_date" class="form-control datepicker"
+                                            placeholder="Opposition Hearing Date..">
+                                    </div>
+                                    <!--opposition hearing date end here-->
+                                    
 
                                     {{-- opponent applicant --}}
                                     {{-- Opponent/Applicant --}}
@@ -293,7 +298,17 @@
                                             placeholder="Please Enter Opponent Code..">
                                     </div>
                                     {{-- opponent --}}
-
+                                    
+                                    
+                                    <!--evidence last date-->
+                                    <div class="col-sm-4" id="evidence_last_date" style="display:none;">
+                                        <label for="" class="form-label">Evidence Last Date</label>
+                                        <input type="text" name="evidence_last_date"
+                                            value="{{ $client->evidence_last_date ?? '' }}"
+                                            class="form-control datepicker"
+                                            placeholder="Please Enter Evidence last Date...">
+                                    </div>
+                                    <!--evidence last date end here-->
 
                                     {{-- examination report --}}
                                     <div class="col-sm-4" id="examination_report_submitted" style="display: none;">
@@ -309,7 +324,7 @@
                                     {{-- hearing date --}}
                                     <div class="col-sm-4" id="hearing_date" style="display: none;">
                                         <label for="" class="form-label">Hearing Date..</label>
-                                        <input type="text" value="" class="form-control datepicker"
+                                        <input type="text" value="{{$client->hearing_date ?? ''}}" class="form-control datepicker"
                                             name="hearing_date" placeholder="Please Enter Hearing Date..">
                                     </div>
                                     {{-- hearing date --}}
@@ -319,7 +334,7 @@
                                     {{-- conditional components start end --}}
 
                                     <div class="col-sm-12">
-                                        <label for="" class="form-label">Sub-Category<span
+                                        <label for="" class="form-label">Trademark Sub Category<span
                                                 class="text-danger">*</span></label>
                                         <select name="sub_category" id="sub-category" required
                                             class="form-select select2" id="">
@@ -414,13 +429,7 @@
                                             value="{{ $client->ip_field ? $client->ip_field : 'Hello' }}" name="ip_field"
                                             readonly class="form-control" placeholder="Name Of IP Field...">
                                     </div>
-                                    <div class="col-sm-4">
-                                        <label for="" class="form-label">Evidence Last Date</label>
-                                        <input type="text" name="evidence_last_date"
-                                            value="{{ $client->evidence_last_date ?? '' }}"
-                                            class="form-control datepicker"
-                                            placeholder="Please Enter Evidence last Date...">
-                                    </div>
+                                    
                                     <div class="col-sm-4">
                                         <label for="" class="form-label">Email Recived Date</label>
                                         <input type="text" value="{{ $client->mail_recived_date ?? '' }}"
@@ -490,7 +499,7 @@
                 e.preventDefault();
                 let statusId = $(this).val();
                 let route = "{{ route('getsubstatus', ':id') }}".replace(':id', statusId);
-                populateSubstatus(route, null);
+                populateSubstatus(route, '');
             });
             // on ready initialize substatus
             const statusId = @json($client->status);

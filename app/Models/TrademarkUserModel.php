@@ -64,9 +64,9 @@ class TrademarkUserModel extends Model
         return $this->belongsTo(MainCategoryModel::class, 'category_id');
     }
     
-    public function status()
+    public function statusMain()
     {
-        return $this->belongsTo(StatusModel::class, 'status');
+        return $this->belongsTo(StatusModel::class, 'status','id');
     }
     
     public function subStatus()
@@ -74,9 +74,9 @@ class TrademarkUserModel extends Model
         return $this->belongsTo(SubStatusModel::class, 'sub_status');
     }
     
-    public function remarks()
+    public function remarksMain()
     {
-        return $this->belongsTo(RemarksModel::class, 'remarks');
+        return $this->belongsTo(RemarksModel::class, 'remarks','id');
     }
     public function clientRemark()
     {
@@ -88,9 +88,9 @@ class TrademarkUserModel extends Model
         return $this->belongsTo(FinancialYearModel::class, 'financial_year');
     }
     
-    public function consultant()
+    public function Clientonsultant()
     {
-        return $this->belongsTo(ConsultantModel::class, 'consultant');
+        return $this->belongsTo(ConsultantModel::class, 'consultant','id');
     }
     
     public function office()
@@ -100,11 +100,11 @@ class TrademarkUserModel extends Model
     
     public function subCategory()
     {
-        return $this->belongsTo(SubCategoryModel::class, 'sub_category');
+        return $this->belongsTo(SubcategoryModel::class, 'sub_category');
     }
         public function dealWith()
     {
-        return $this->belongsTo(SubcategoryModel::class, 'deal_with','id');
+        return $this->belongsTo(DeallerModel::class, 'deal_with','id');
     }
     public function statusHistories()
 {

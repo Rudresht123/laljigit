@@ -9,6 +9,7 @@ use App\Models\ConsultantModel;
 use App\Models\StatusModel;
 use App\Models\SubcategoryModel;
 use Illuminate\Http\Request;
+use Schema;
 
 class ClientsReports extends Controller
 {
@@ -19,6 +20,9 @@ class ClientsReports extends Controller
             $mcategories = MainCategoryModel::where('status', 'yes')->get();
             $subcategory = SubcategoryModel::get();
         
-            return view('admin_panel.reports.client_reports', compact('attorneys', 'statuss', 'mcategories','subcategory'));
+                   $columns = Schema::getColumnListing('trademark_users');
+           
+            return view('admin_panel.reports.client_reports', compact('attorneys', 'statuss', 'mcategories','subcategory','columns'));
+   
     }
 }

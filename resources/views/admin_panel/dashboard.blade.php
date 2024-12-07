@@ -64,14 +64,14 @@
 {{-- report section --}}
 
     <div class="row d-flex mt-3" style="box-sizing:border-box;">
-        <div class="col-sm-6 ">
+        <div class="col-lg-6 mb-3 mb-md-0">
             <div class="custom-card">
                 <div class="panel  m-0 p-0  panel-default">
                     <div class="panel-heading border-bottom mb-2">
                         <h6 class="tx-14 m-0 p-0"><b class="d-flex"><i class="far fa-address-book"></i> Attorneys Vise Clients Summary</b></h6>
                     </div>
                     <div class="panel-body  pt-0">
-                        <div class="row m-0 p-0">
+                        <div class="row m-0 p-0" >
                             <div id="class-section-attendance-absent-summary" class="col-lg-12 m-0 p-0"
                                 style="max-height: 300px; min-height: 300px; overflow-y: scroll;">
                                 <!-- class-section-attendance-absent-summary -->
@@ -85,7 +85,7 @@
                                         onclick="toggleDetails(this)">
                                         <div class="row d-felx">
                                             <div class="col-9 pl-4">
-                                                <b class="fs-13">{{ $attoerny->attorneys_name ? $attoerny->attorneys_name : '' }}</b>
+                                                <b class="fs-10">{{ $attoerny->attorneys_name ? $attoerny->attorneys_name : '' }}</b>
                                             </div>
                                             <div class="col-3 text-center">
                                                 <!-- Assuming 'students' is the relationship -->
@@ -113,17 +113,17 @@
                                                         @php
                                                         ++$counter;
                                                         @endphp
-                                                        <tr>
+                                                        <tr class="fs-10">
                                                             <td>
-                                                                <a href="{{ route('admin.attorney.clientDetails', ['category_slug' => $groupdata->category_slug, 'application_no' => $groupdata->application_no]) }}">
+                                                                <a href="{{ route('admin.attorney.clientDetails', ['category_slug' => $groupdata->mainCategory->category_slug, 'application_no' => $groupdata->application_no]) }}">
                                                                     {{ $groupdata->application_no  ?? ''}}
                                                                 </a>
                                                             </td>
                                                             <!-- Placeholder for profile image -->
                                                             <td>{{ $groupdata->file_name ?? '' }}</td>
-                                                            <td>{{ $groupdata->trademark_name  ?? ''}}</td>
+                                                            <td style="word-wrap:nowrap;">{{ $groupdata->trademark_name  ?? ''}}</td>
                                                             <td>{{ $groupdata->phone_no ?? '' }}</td>
-                                                            <td>{{ $groupdata->subcategory ?? '' }}</td>
+                                                            <td>{{ $groupdata->statusMain->status_name ?? '' }}</td>
                                                         </tr>
                                                         @endif
                                                         @endforeach
@@ -289,9 +289,9 @@
                         </b>
                     </h6>
                 </div>
-                <div class="panel-body pt-0">
-                    <canvas id="chartBar2" class="chart_canvas"></canvas>
-                </div>
+<div class="panel-body pt-0" style="overflow-x: auto; white-space: nowrap;width:100%;">
+    <canvas id="chartBar2" class="chart_canvas"></canvas>
+</div>
             </div>
         </div>
     </div>

@@ -155,7 +155,7 @@
 
                             let subCategoryId = $(this).data('id'); // Get subcategory ID
                             // Prepare the route for deletion
-                            let route = "{{ route('admin.global-setting.delete.sub-category', ':id') }}"
+                            let route = "{{ route('admin.global-setting.destroy-sub-status', ':id') }}"
                                 .replace(':id', subCategoryId);
 
                             // AJAX request to delete the subcategory

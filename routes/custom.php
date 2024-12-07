@@ -34,3 +34,14 @@ Route::get('admin/client/status-history/{application_no}',[StatusHistoryControll
 
 // Update status Controller For The Main Status With Dynamic COnditional Fields
 Route::get('admin/{slug}/client/update-status/{application_no}',[CustomFunctions::class,'getUpdateStatusConditionalFields'])->name('admin.status.UpdateStatusConditionalFields')->middleware(['auth','verified']);
+
+
+
+
+
+// Route for the Attoerny Chart on click Count Open Data
+Route::get('admin/client-data/{attorney_id}/{category_slug}/{status_id}', [CustomFunctions::class, 'getAttoernyStatusWiseData'])
+    ->name('admin.attorney.chart.status-data')
+    ->middleware(['auth', 'verified']);
+Route::post('admin/client-data/attoerny-chart-count',[CustomFunctions::class,'getAttoernyChartCountStatusWiseData'])->name('admin.getData-for-attoernychart-count')->middleware(['auth','verified']); 
+

@@ -128,7 +128,7 @@
                         <div class="gorm-group hidden">
                             <label for="" class="form-label">Office Name <span
                                     class="text-danger">*</span></label>
-                            <input type="text" id="office_name" readonly name="office_name"
+                            <input type="text" id="office_name"  name="office_name"
                                 autocomplete="off" class="form-control input-sm" required
                                 placeholder="Enter Your Office name...">
                         </div>

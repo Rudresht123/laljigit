@@ -221,7 +221,7 @@
                     <li class="fw-bold" style="font-size:10px;">Financial Year :
                         {{ Session::get('financial_session') }}</li>
                     <li class="fw-bold" style="font-size:10px;">Today : {{ Carbon::today()->format('d-m-Y') }}</li>
-                    <li style="font-size:10px;"><a class="fw-bold text-danger" href="" data-bs-toggle="modal"
+                    <li style="font-size:10px;"><a class="fw-bold d-none d-md-block text-danger" href="" data-bs-toggle="modal"
                             data-bs-target="#changeSession"><i class="far fa-calendar-check"></i> Change</a></li>
                 </ul>
             </a><!-- dropdown-link -->
@@ -233,8 +233,7 @@
                     <img src="{{ asset('assets/newimage/user.png') }}" class="rounded-circle" alt="">
 
                 </div>
-                <span
-                    class="tx-semibold fw-bold text-dark fs-13 ms-1 mg-b-5 pt-2">{{ Auth::user()->name ? Auth::user()->name : '' }}</span>
+                <span class="tx-semibold d-none d-md-block fw-bold text-dark fs-13 ms-1 mg-b-5 pt-2">{{ Auth::user()->name ? Auth::user()->name : '' }}</span>
             </a><!-- dropdown-link -->
             <div class="dropdown-menu dropdown-menu-end tx-13">
                 <div class="avatar avatar-lg mg-b-15"><img src="{{ asset('assets/newimage/user.png') }}"

@@ -4,7 +4,7 @@
 
 {{-- main section start here --}}
 @section('authContent')
-<div class="content content-auth" style="background-image: url('{{ asset('assets/newimage/bg-app.jpg') }}'); background-size: 100% 100vh; min-height: 100vh;">
+<div class="p-0 p-md-3 content-auth" style="background-image: url('{{ asset('assets/newimage/bg-app.jpg') }}'); background-size: 100% 100vh; min-height: 100vh;">
     <div class="container">
         <div class="loginContainer media align-items-stretch justify-content-center ht-100p pos-relative">
             <div class="media-body align-items-center d-none d-lg-flex">
@@ -19,7 +19,7 @@
                         <span class="fs-3">Intellectual Property Service</span>
                     </div>
                     <h3 class="tx-color-01 mg-b-5">Sign In</h3>
-                    <p class="tx-color-03 tx-16 mg-b-">Welcome back! Please sign in to continue.</p>
+                    <p class="tx-color-03 tx-16 mg-b-3 fs-10">Welcome back! Please sign in to continue.</p>
 
                     <form method="POST" action="{{ route('login') }}">
                         @csrf

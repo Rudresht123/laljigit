@@ -23,12 +23,13 @@ class DashboardController extends Controller
         $consultant = ConsultantModel::where('status', 'yes')->get();
         $subcategory = SubcategoryModel::get();
         $attoernyes=AttorneysModel::get();
-        $groupedData = DB::table('trademark_users')
-        // ->join('sub_category','trademark_users.sub_category','sub_category.id')
-        ->join('main_category','trademark_users.category_id','main_category.id')
-        ->get();
-
       
+
+$groupedData = TrademarkUserModel::with([
+            'mainCategory:*',
+            'statusMain:*'
+        ])->get();
+
 
 
         $trademarkuserrenewal = TrademarkUserModel::where('sub_category', 4)

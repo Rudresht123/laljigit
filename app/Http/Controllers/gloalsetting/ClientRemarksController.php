@@ -107,6 +107,13 @@ class ClientRemarksController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+         $result=ClientRemarksModel::find($id)->delete();
+        if($result)
+        {
+            return response()->json(['success'=>'CLient Remarks Deleted Successfully Done']);
+        }
+        else{
+            return response()->json(['error'=>'Client Remarks Not  Deleted Successfully Done']);
+        }
     }
 }

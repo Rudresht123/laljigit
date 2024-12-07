@@ -39,27 +39,21 @@ public function ClientsImport(Request $request){
         Log::info($request->file('excel_file'));
         Excel::import(new ClientsImport, $request->file('excel_file'));
 }
-    public function ClientsExcelExport(Request $request){
-        $query = TrademarkUserModel::query()
-        ->join('attorneys', 'trademark_users.attorney_id', '=', 'attorneys.id')
-        ->join('main_category', 'trademark_users.category_id', '=', 'main_category.id')
-        ->join('offices', 'trademark_users.office_id', '=', 'offices.id')
-        ->join('status', 'trademark_users.status', '=', 'status.id')
-        ->join('sub_status', 'trademark_users.sub_status', '=', 'sub_status.id')
-        ->join('client_remarks', 'trademark_users.client_remarks', '=', 'client_remarks.id')
-        ->join('remarks', 'trademark_users.remarks', '=', 'remarks.id')
-        ->join('opposition_status', 'trademark_users.opp_status', '=', 'opposition_status.id')
-        ->select(
-            'trademark_users.*',  
-            'attorneys.attorneys_name as attorney_name',  
-            'main_category.category_name as category_name',  
-            'offices.office_name as office_name',  
-            'status.status_name as status_name',  
-            'sub_status.substatus_name as sub_status_name',  
-            'client_remarks.client_remarks as client_remark',  
-            'remarks.remarks as remark',  
-            'opposition_status.opp_status_name as opposition_status_name'
-        );
+public function ClientsExcelExport(Request $request){
+        
+          $query=TrademarkUserModel::with(
+            'attorney:id,attorneys_name',
+            'mainCategory:id,category_name,category_slug',
+            'office:id,office_name',
+            'statusMain:id,status_name',
+            'subStatus:id,substatus_name',
+            'clientRemark:id,client_remarks',
+            'remarksMain:id,remarks as remarks_name',
+            'Clientonsultant:id,consultant_name',
+            'dealWith:id,dealler_name',
+            'subCategory:id,subcategory',
+            'financialYear:id,financial_session'
+            );
 
     // Apply filters like in your form
     if (!empty($request->attorney_id)) {
@@ -78,8 +72,8 @@ public function ClientsImport(Request $request){
         $query->whereBetween('trademark_users.created_at', [$request->start, $request->from]);
     }
 
-    // Export the filtered data
-    return Excel::download(new ExportExcels($query), 'filtered_data.xlsx');
+    $columns = $request->input('column');
+    return Excel::download(new ExportExcels($query,$columns), 'trademark_clients.xlsx');
 }
 }
 
