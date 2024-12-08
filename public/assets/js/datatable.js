@@ -208,3 +208,62 @@ function clientData(route, csrftoken) {
 }
 
 
+// block data
+function blockData(route,csrf,dbtable,columnname,itemId) {
+    $.ajax({
+        url: route, // Replace with your actual route
+        method: 'POST',
+        headers: {
+            'X-CSRF-TOKEN': csrf
+        },
+        data: {
+           dbtable:dbtable,
+           columnname:columnname,
+           itemId:itemId
+        },
+        success: function (response) {
+            if (response.success) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success!',
+                    text: response.message,
+                }).then(() => {
+                    location.reload(); // Reload the page to reflect changes
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: 'Failed to block the item. Please try again.',
+                });
+            }
+        },
+        error: function () {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: 'An error occurred. Please try again.',
+            });
+        }
+    });
+}
+function showConfirmAlert(route,csrf,dbtable,columnname,itemId){
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "This action cannot be undone!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Are you sure!',
+        cancelButtonText: 'Cancel'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            
+            blockData(route,csrf,dbtable,columnname,itemId);
+        }
+    });
+}
+
+
+

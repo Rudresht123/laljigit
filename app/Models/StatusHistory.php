@@ -11,7 +11,7 @@ class StatusHistory extends Model
 
     protected $table="client_status_history";
     protected $fillable = [
-        'application_no',
+        'client_id',
         'file_name',
         'status_history',
     ];

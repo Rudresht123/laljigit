@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('client_status_history', function (Blueprint $table) {
                 $table->id();
-                $table->unsignedBigInteger('application_no')->unique();
+                $table->unsignedBigInteger('client_id')->unique();
                 $table->string('file_name');
                 $table->string('email')->unique();
                 $table->json('status_history')->nullable(); // To store status details as JSON

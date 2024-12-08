@@ -34,13 +34,13 @@
                                     <th class="fw-bold">Consultant Name</th>
                                     <th class="fw-bold">Status</th>
                                     <th class="fw-bold">Action</th>
-                                   
+
                                 </tr>
                             </thead>
                             <tbody>
-                             
+
                             </tbody>
-                            
+
                         </table>
                     </div>
                 </div>
@@ -52,8 +52,8 @@
 
     </div>
 
-   
-  
+
+
     <!-- Modal -->
     <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
@@ -69,25 +69,27 @@
                         @csrf
                         <fieldset class="form-fieldset">
                             <legend>Consultant Information</legend>
-                        <div class="gorm-group ">
-                            <label for="" class="form-label">Consultant Name <span
-                                    class="text-danger">*</span></label>
-                                    <input name="consultant_name" type="text" class="form-control" required placeholder="Consultant Name...">
-                        </div>
-                        <div class="gorm-group ">
-                            <label for="" class="form-label">Status<span class="text-danger">*</span></label>
-                           <select class="form-select" name="status" id="">
-                            <option value="yes">Active</option>
-                            <option value="no">De-Active</option>
-                           </select>
-                        </div>
-                    <div class="row mt-3">
-                        <div class="col d-flex justify-content-end">
-                            <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Close</button>
-                            <button type="submit" class="btn btn-primary">Save</button>
-                        </div>
-                    </div>
-                    </fieldset>
+                            <div class="gorm-group ">
+                                <label for="" class="form-label">Consultant Name <span
+                                        class="text-danger">*</span></label>
+                                <input name="consultant_name" type="text" class="form-control" required
+                                    placeholder="Consultant Name...">
+                            </div>
+                            <div class="gorm-group ">
+                                <label for="" class="form-label">Status<span class="text-danger">*</span></label>
+                                <select class="form-select" name="status" id="">
+                                    <option value="yes">Active</option>
+                                    <option value="no">De-Active</option>
+                                </select>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col d-flex justify-content-end">
+                                    <button type="button" class="btn btn-secondary me-2"
+                                        data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Save</button>
+                                </div>
+                            </div>
+                        </fieldset>
                     </form>
                 </div>
             </div>
@@ -100,7 +102,7 @@
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="exampleModalLabel"><i class="fa fa-plus" aria-hidden="true"></i>
                         Edit
-                       Consultant</h1>
+                        Consultant</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -110,27 +112,30 @@
                         <fieldset class="form-fieldset">
                             <legend>Consultant Information</legend>
                             <div class="form-group">
-                                <input type="text" hidden class="form-control" name="status_id" value="" id="status_id">
+                                <input type="text" hidden class="form-control" name="status_id" value=""
+                                    id="status_id">
                             </div>
-                        <div class="gorm-group ">
-                            <label for="" class="form-label">Consultant Name <span
-                                    class="text-danger">*</span></label>
-                                    <input name="consultant_name" type="text" class="form-control" required placeholder="Consultant Name...">
+                            <div class="gorm-group ">
+                                <label for="" class="form-label">Consultant Name <span
+                                        class="text-danger">*</span></label>
+                                <input name="consultant_name" type="text" class="form-control" required
+                                    placeholder="Consultant Name...">
 
-                        </div>
-                        <div class="gorm-group ">
-                            <label for="" class="form-label">Status<span class="text-danger">*</span></label>
-                           <select class="form-select" name="status" id="">
-                            <option value="yes">Active</option>
-                            <option value="no">De-Active</option>
-                           </select>
-                        </div>                     
-                        <div class="row mt-3">
-                            <div class="col d-flex justify-content-end">
-                                <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-primary">Save</button>
                             </div>
-                        </div>
+                            <div class="gorm-group ">
+                                <label for="" class="form-label">Status<span class="text-danger">*</span></label>
+                                <select class="form-select" name="status" id="">
+                                    <option value="yes">Active</option>
+                                    <option value="no">De-Active</option>
+                                </select>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col d-flex justify-content-end">
+                                    <button type="button" class="btn btn-secondary me-2"
+                                        data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-primary">Save</button>
+                                </div>
+                            </div>
                         </fieldset>
                     </form>
                 </div>
@@ -201,11 +206,11 @@
             });
 
             // Handle Edit Button Click
-            $('#consultantTable').on('click','.editButton', function(e) {
+            $('#consultantTable').on('click', '.editButton', function(e) {
                 e.preventDefault();
                 let statusId = $(this).data('id');
                 let route = "{{ route('admin.global-setting.edit-consultant', ':id') }}".replace(':id',
-                statusId);
+                    statusId);
 
                 $.ajax({
                     url: route,
@@ -229,7 +234,7 @@
                 e.preventDefault();
                 let statusId = $('#status_id').val(); // Get the year ID again if needed
                 let route = "{{ route('admin.global-setting.update-consultant', ':id') }}".replace(':id',
-                statusId);
+                    statusId);
                 let formData = $(this).serialize();
 
                 $.ajax({
@@ -275,7 +280,7 @@
                     }
                 });
             });
-            $('#consultantTable').on('click','.deletebutton', function(e) {
+            $('#consultantTable').on('click', '.deletebutton', function(e) {
                 e.preventDefault();
                 Swal.fire({
                     title: 'Are you sure?',
@@ -334,40 +339,58 @@
 
             });
         });
-        
     </script>
 
-          {{-- /datatable initialization --}}
-          <script type="text/javascript">
-            $(document).ready(function() {
-                let route = "{{ route('admin.common.datatable') }}";
-                let csrf = "{{ csrf_token() }}";
-    
-                let columnsDefinition = [{
-                        data: 'consultant_name',
-                        name: 'consultant_name'
-                    },
-                    {
-                        data: 'status',
-                        name: 'status'
-                    },
-                    {
-                        data: 'actions',
-                        name: 'actions',
-                        orderable: false,
-                        searchable: false
-                    }
-                ];
-    
-                intializeCustomDatatable({
-                    route: route, // Correctly assign the route
-                    csrf: csrf, // Correctly assign the CSRF token
-                    columnsDefinition: columnsDefinition, // Assign columnsDefinition
-                    tableId: 'consultantTable', // Assign the table ID
-                    dbtable: 'consultant' // Assign the database table name
-                });
+    {{-- /datatable initialization --}}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            let route = "{{ route('admin.common.datatable') }}";
+            let csrf = "{{ csrf_token() }}";
+
+            let columnsDefinition = [{
+                    data: 'consultant_name',
+                    name: 'consultant_name'
+                },
+                {
+                    data: 'status',
+                    name: 'status'
+                },
+                {
+                    data: 'actions',
+                    name: 'actions',
+                    orderable: false,
+                    searchable: false
+                }
+            ];
+
+            intializeCustomDatatable({
+                route: route, // Correctly assign the route
+                csrf: csrf, // Correctly assign the CSRF token
+                columnsDefinition: columnsDefinition, // Assign columnsDefinition
+                tableId: 'consultantTable', // Assign the table ID
+                dbtable: 'consultant' // Assign the database table name
             });
-        </script>
-            
-        
+
+            // block and unbloc code here
+
+            $('#consultantTable').on('click', '.blockButton', function(e) {
+                e.preventDefault();
+                let itemId = $(this).data('id');
+                let csrf = "{{ csrf_token() }}";
+                let route = "{{ route('admin.block-data') }}";
+                let dbtable = "consultant";
+                let columnname = "status";
+                showConfirmAlert(route, csrf, dbtable, columnname, itemId);
+            });
+            $('#consultantTable').on('click', '.blockButton', function(e) {
+                e.preventDefault();
+                let itemId = $(this).data('id');
+                let csrf = "{{ csrf_token() }}";
+                let route = "{{ route('admin.block-data') }}";
+                let dbtable = "consultant";
+                let columnname = "status";
+                showConfirmAlert(route, csrf, dbtable, columnname, itemId);
+            });
+        });
+    </script>
 @endsection

@@ -22,6 +22,7 @@ return new class extends Migration
                 $table->unsignedBigInteger('session_id')->nullable();
                 $table->string('plain_password');
                 $table->rememberToken();
+                $table->enum('status',['yes','no'])->default('yes');
                 $table->timestamps();
             });
     

@@ -38,47 +38,19 @@
                         </div>
                     </div>
                     <div class="table-responsive">
-                        <table id="AttorneysTable" class="table table-bordered fs-13 text-center">
-                            <thead class="bg-light fw-bold">
+                        <table id="AttorneysTable" class="table w-100 table-hover fs-10">
+                            <thead class="bg-light text-center fw-bold">
                                 <tr class="py-3">
-                                    <th class="fw-bold">Sr. No.</th>
-                                    <th class="fw-bold">Profile Pic.</th>
                                     <th class="fw-bold">Attorney Name</th>
                                     <th class="fw-bold">Email</th>
                                     <th class="fw-bold">Phone Number</th>
                                     <th class="fw-bold">Specialization</th>
+                                    <th class="fw-bold">Status</th>
                                     <th class="fw-bold">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @php
-                                    $counter = 0;
-                                @endphp
-                                @foreach ($attroneys as $attorney)
-                                    <tr class="justify-content-center align-items-center">
-                                        <td>{{ ++$counter }}</td>
-                                        <td class="text-center  d-flex justify-content-center align-items-center">
-                                            <div class="avatar avatar-sm ">
-                                                <img src="{{ asset('storage/uploads/attorneys_images/' . $attorney->profile_picture) }}"
-                                                    class="rounded-circle" alt="">
-                                            </div>
-                                        </td>
-                                        <td>{{ $attorney->attorneys_name ? $attorney->attorneys_name : '' }}</td>
-                                        <td>{{ $attorney->email ? $attorney->email : '' }}</td>
-                                        <td>{{ $attorney->phone_number ? $attorney->phone_number : '' }}</td>
-                                        <td>{{ $attorney->specialization ? $attorney->specialization : '' }}</td>
-                                        <td class="d-flex justify-content-center">
-                                            <a href="" title="Show Attorney " class="me-2 text-success"><i
-                                                    class="far fa-user"></i></a>
-                                            <a href="{{ route('admin.global-setting.edit.attorneys', $attorney->id) }}"
-                                                title="Edit Attorney" class="editButton" data-id="{{ $attorney->id }}"
-                                                class="text-primary p-1 rounded fw-bold "><i class="far fa-edit"></i></a>
-                                            <a href="" data-id="{{ $attorney->id }}" title="Delete Attorney"
-                                                class="deletebutton text-danger p-1 rounded fw-bold "><i
-                                                    class="fa fa-trash"></i></a>
-                                        </td>
-                                    </tr>
-                                @endforeach
+                              
                             </tbody>
                         </table>
                     </div>
@@ -154,6 +126,69 @@
                         });
                     }
                 });
+            });
+        });
+    </script>
+     <script type="text/javascript">
+        $(document).ready(function() {
+            let route = "{{ route('admin.common.datatable') }}";
+            let csrf = "{{ csrf_token() }}";
+
+            let columnsDefinition = [{
+                    data: 'attorneys_name',
+                    name: 'attorneys_name'
+                },
+                {
+                    data: 'email',
+                    name: 'email'
+                },
+                {
+                    data: 'phone_number',
+                    name: 'phone_number'
+                },
+                {
+                    data: 'specialization',
+                    name: 'specialization'
+                },
+                {
+                    data: 'status',
+                    name: 'status'
+                },
+                {
+                    data: 'actions',
+                    name: 'actions',
+                    orderable: false,
+                    searchable: false
+                }
+            ];
+
+            intializeCustomDatatable({
+                route: route, 
+                csrf: csrf,
+                columnsDefinition: columnsDefinition,
+                tableId: 'AttorneysTable',
+                dbtable: 'attorneys'
+            });
+
+            // block and unbloc code here
+
+            $('#consultantTable').on('click', '.blockButton', function(e) {
+                e.preventDefault();
+                let itemId = $(this).data('id');
+                let csrf = "{{ csrf_token() }}";
+                let route = "{{ route('admin.block-data') }}";
+                let dbtable = "consultant";
+                let columnname = "status";
+                showConfirmAlert(route, csrf, dbtable, columnname, itemId);
+            });
+            $('#consultantTable').on('click', '.blockButton', function(e) {
+                e.preventDefault();
+                let itemId = $(this).data('id');
+                let csrf = "{{ csrf_token() }}";
+                let route = "{{ route('admin.block-data') }}";
+                let dbtable = "consultant";
+                let columnname = "status";
+                showConfirmAlert(route, csrf, dbtable, columnname, itemId);
             });
         });
     </script>

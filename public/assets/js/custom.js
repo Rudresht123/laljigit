@@ -135,7 +135,7 @@ function populateDatalist(data) {
     if (data.length > 0) {
         data.forEach(function(item) {
             let option = $('<option></option>')
-                .val(item.application_no)
+                .val(item.id)
                 .text(item.file_name) 
                 .attr('data-id', item.id); 
             datalist.append(option);
@@ -193,6 +193,9 @@ function validateSelectBoxes(selectBoxIds) {
 
     return isValid;
 }
+
+
+// function for the insert record when the another opposed number
 
 
 

@@ -71,7 +71,7 @@
                     </div>
                     @if ($category->category_slug === 'trademark')
                         <form id="registrationTrademarkForm"
-                            action="{{ route('admin.attorney.updatetrademarkformdata', $client->application_no) }}"
+                            action="{{ route('admin.attorney.updatetrademarkformdata', $client->id) }}"
                             method="POST">
                             @csrf
                             <fieldset class="form-fieldset">
@@ -99,7 +99,7 @@
                                         <select name="office_id" class="form-select" required id="office_id">
                                             <option value="">**Please Office Name...</option>
                                             @foreach ($offices as $office)
-                                                <option value="{{ $office->id ? $office->id : '' }}"
+                                                <option class="capitalize" value="{{ $office->id ? $office->id : '' }}"
                                                     {{ $office->id == $client->office_id ? 'selected' : '' }}>
                                                     {{ $office->office_name ??  '' }}</option>
                                             @endforeach
@@ -137,7 +137,7 @@
                                         <select name="trademark_class" required class="form-select" id="trademarkclass">
                                             <option value="">**Please Select Trademark Class...</option>
                                             @foreach ($classes as $class)
-                                                <option value="{{ $class->class_name ? $class->class_name : '' }}"
+                                                <option class="capitalize" value="{{ $class->class_name ? $class->class_name : '' }}"
                                                     {{ $class->class_name == $client->trademark_class ? 'selected' : '' }}>
                                                     {{ $class->class_name ? $class->class_name : '' }}</option>
                                             @endforeach
@@ -200,7 +200,7 @@
                                             id="">
                                             <option value="">**Please Select Status</option>
                                             @foreach ($statuss as $status)
-                                                <option data-slug="{{ $status->slug ?? '' }}"
+                                                <option class="capitalize" data-slug="{{ $status->slug ?? '' }}"
                                                     data-id="{{ $status->id }}"
                                                     value="{{ $status->id ? $status->id : '' }}"
                                                     {{ $status->id == $client->status ? 'selected' : '' }}>
@@ -216,12 +216,13 @@
                                         </select>
                                     </div>
 
+
                                     {{-- conditional components start here --}}
 
                                     {{-- opposed no --}}
                                     <div class="col-sm-4" id="opposed_no" style="display: none;">
                                         <label for="" class="form-label">Opposed No..</label>
-                                        <input type="text" value="" class="form-control" name="opposed_no"
+                                        <input type="text" value="{{$client->opposed_no ?? ''}}" class="form-control" name="opposed_no"
                                             placeholder="Please Enter Oppose No..">
                                     </div>
                                     {{-- opposed no --}}
@@ -330,6 +331,19 @@
                                     {{-- hearing date --}}
 
 
+                                    {{-- for another opposed no --}}
+                                    
+                                    @if($client->opposed_no !=null)
+                                    <div class="col-sm-4 " style="padding-top:25px;">
+                                        <button
+                                         id="anotherOpposed" class="fs-14">
+                                            <span class="badge text-bg-danger"> <i class="fa fa-plus" aria-hidden="true"></i> Have AnyOther Opposed</span>
+                                        </button>
+                                    </div>
+                                    @endif
+
+                                    {{-- for another opposed no --}}
+
 
                                     {{-- conditional components start end --}}
 
@@ -340,7 +354,7 @@
                                             class="form-select select2" id="">
                                             <option value="">**Please Select Sub-Category</option>
                                             @foreach ($subcategory as $subcat)
-                                                <option value="{{ $subcat->id ? $subcat->id : '' }}"
+                                                <option class="capitalize" value="{{ $subcat->id ? $subcat->id : '' }}"
                                                     {{ $subcat->id == $client->sub_category ? 'selected' : '' }}>
                                                     {{ $subcat->subcategory ? $subcat->subcategory : '' }}</option>
                                             @endforeach
@@ -360,7 +374,7 @@
                                         <select name="consultant" required class="form-select" id="consultant">
                                             <option value="">**Please Select Consultant Name..</option>
                                             @foreach ($consultant as $consultant)
-                                                <option value="{{ $consultant->id ?? '' }}"
+                                                <option class="capitalize" value="{{ $consultant->id ?? '' }}"
                                                     {{ $consultant->id == $client->consultant ? 'selected' : '' }}>
                                                     {{ $consultant->consultant_name ?? '' }}</option>
                                             @endforeach
@@ -374,7 +388,7 @@
                                         <select name="deal_with" required class="form-select" id="deal_with">
                                             <option value="">**Please Select Dealler Name..</option>
                                             @foreach ($dealWith as $dealw)
-                                                <option value="{{ $dealw->id ?? '' }}"
+                                                <option class="capitalize" value="{{ $dealw->id ?? '' }}"
                                                     {{ $dealw->id == $client->deal_with ? 'selected' : '' }}>
                                                     {{ $dealw->dealler_name ?? '' }}
                                                 </option>
@@ -395,7 +409,7 @@
                                         <select name="remarks" required class="form-select select2" id="remarks">
                                             <option value="">**Please Select Remarks</option>
                                             @foreach ($remarks as $remark)
-                                                <option value="{{ $remark->id ? $remark->id : '' }}"
+                                                <option class="capitalize" value="{{ $remark->id ? $remark->id : '' }}"
                                                     {{ $remark->id == $client->remarks ? 'selected' : '' }}>
                                                     {{ $remark->remarks ? $remark->remarks : '' }}</option>
                                             @endforeach
@@ -408,7 +422,7 @@
                                             id="client_remarks">
                                             <option value="">**Please Select Remarks</option>
                                             @foreach ($clientRemarks as $cleintRemark)
-                                                <option value="{{ $cleintRemark->id ? $cleintRemark->id : '' }}"
+                                                <option class="capitalize" value="{{ $cleintRemark->id ? $cleintRemark->id : '' }}"
                                                     {{ $cleintRemark->id == $client->client_remarks ? 'selected' : '' }}>
                                                     {{ $cleintRemark->client_remarks ? $cleintRemark->client_remarks : '' }}
                                                 </option>
@@ -598,7 +612,34 @@
                     getOpponentApplicantNameNumber(getvalue, statusSlug);
                 }
             })();
+
+            $('#anotherOpposed').on('click',function(e){
+                e.preventDefault();
+                alert("Hello");
+            });
         });
+    </script>
+    <script>
+         $(document).ready(function() {
+            $('#anotherOpposed').on('click', function(e) {
+            e.preventDefault();
+            Swal.fire({
+                title: 'Are you sure?',
+                text: 'Do you any other Opposed?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, I Have!',
+                cancelButtonText: 'No, cancel'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const form = document.getElementById('registrationTrademarkForm');
+                    form.action = "{{ route('admin.SaveDataForAnotherOpposedNumber') }}";
+                    form.method="POST";
+                    form.submit();
+                }
+            });
+        });
+         });
     </script>
 
     {{-- onload initialized the hidden fields --}}

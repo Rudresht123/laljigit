@@ -387,6 +387,30 @@
             tableId: 'remarksTable', // Assign the table ID
             dbtable: 'remarks' // Assign the database table name
         });
+
+        
+// block and unbloc code here
+        
+$('#remarksTable').on('click', '.blockButton', function(e) 
+        {
+    e.preventDefault();
+    let itemId = $(this).data('id'); 
+    let csrf = "{{ csrf_token() }}"; 
+    let route = "{{ route('admin.block-data') }}"; 
+    let dbtable = "remarks"; 
+    let columnname = "is_active";
+    showConfirmAlert(route, csrf, dbtable, columnname, itemId);
+});
+    $('#remarksTable').on('click', '.blockButton', function(e) 
+        {
+    e.preventDefault();
+    let itemId = $(this).data('id'); 
+    let csrf = "{{ csrf_token() }}"; 
+    let route = "{{ route('admin.block-data') }}"; 
+    let dbtable = "remarks"; 
+    let columnname = "is_active";
+    showConfirmAlert(route, csrf, dbtable, columnname, itemId);
+});
     });
 </script>
 @endsection

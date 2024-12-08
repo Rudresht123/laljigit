@@ -386,6 +386,30 @@
             tableId: 'ClientremarksTable', // Assign the table ID
             dbtable: 'client_remarks' // Assign the database table name
         });
+
+
+        // block and unbloc code here
+        
+$('#ClientremarksTable').on('click', '.blockButton', function(e) 
+        {
+    e.preventDefault();
+    let itemId = $(this).data('id'); 
+    let csrf = "{{ csrf_token() }}"; 
+    let route = "{{ route('admin.block-data') }}"; 
+    let dbtable = "client_remarks"; 
+    let columnname = "status";
+    showConfirmAlert(route, csrf, dbtable, columnname, itemId);
+});
+    $('#ClientremarksTable').on('click', '.blockButton', function(e) 
+        {
+    e.preventDefault();
+    let itemId = $(this).data('id'); 
+    let csrf = "{{ csrf_token() }}"; 
+    let route = "{{ route('admin.block-data') }}"; 
+    let dbtable = "client_remarks"; 
+    let columnname = "status";
+    showConfirmAlert(route, csrf, dbtable, columnname, itemId);
+});
     });
 </script>
 @endsection

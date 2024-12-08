@@ -120,9 +120,9 @@ Route::get('admin/global_setting/trademark-classes',[TradeMarksClasses::class,'T
 Route::get('admin/attorney/category/{id}',[RegistrationController::class,'showAttorneyCatgory'])->name('admin.attorney.show-category')->middleware(['auth','verified']);
 Route::get('admin/attorney/category/{attoernyId}/{category}',[RegistrationController::class,'registrationForm'])->name('admin.attorney.user-registration')->middleware(['auth','verified']);
 Route::post('admin/attorney/category/addTrademarkFormData',[RegistrationController::class,'addTrademarkUserForm'])->name('admin.attorney.addtrademarkformdata')->middleware(['auth','verified']);
-Route::post('admin/attorney/category/updateTrademarkFormData/{application_no}',[RegistrationController::class,'updateClientDetails'])->name('admin.attorney.updatetrademarkformdata')->middleware(['auth','verified']);
-Route::get('admin/attorney/category/client-details/category/{category_slug}/application_no/{application_no}', [RegistrationController::class, 'clientsDetails'])->name('admin.attorney.clientDetails')->middleware(['auth', 'verified']);
-Route::get('admin/attorney/{attoerny_id}/category/edit-client-details/category/{category_slug}/application_no/{application_no}', [RegistrationController::class, 'editClientDetails'])->name('admin.attorney.edit-clientDetails')->middleware(['auth', 'verified']);
+Route::post('admin/attorney/category/updateTrademarkFormData/{id}',[RegistrationController::class,'updateClientDetails'])->name('admin.attorney.updatetrademarkformdata')->middleware(['auth','verified']);
+Route::get('admin/attorney/category/client-details/category/{category_slug}/id/{id}', [RegistrationController::class, 'clientsDetails'])->name('admin.attorney.clientDetails')->middleware(['auth', 'verified']);
+Route::get('admin/attorney/{attoerny_id}/category/edit-client-details/category/{category_slug}/id/{id}', [RegistrationController::class, 'editClientDetails'])->name('admin.attorney.edit-clientDetails')->middleware(['auth', 'verified']);
 
 
 

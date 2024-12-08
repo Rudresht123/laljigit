@@ -124,12 +124,11 @@ class RegistrationController extends Controller
     }
     
     // dynamic fileds code end here
+        if ($TrademarkUser->save()) {
+            echo $TrademarkUser->id;
 
-
-    if ($application_no) {
-        if ($userdata = $TrademarkUser->save()) {
             StatusHistory::create([
-                'application_no' => $request->input('application_no'),
+                'client_id' => $TrademarkUser->id,
                 'file_name'=>$request->input('file_name'), 
                 'status_history' => json_encode([
                     [
@@ -139,24 +138,19 @@ class RegistrationController extends Controller
                     ]
                 ]),
             ]);
+            return redirect()->back()->with(['success' => 'User Registered Successfully Done']);
         }
+    else{
+        return redirect()->back()->with(['error' => 'User not Registerd Successfully Done']);
     }
-    
-        $userId = $TrademarkUser->id;
-        if ($userdata) {
-            if ($userdata){
-             return redirect()->back()->with(['success' => 'User Registered Successfully Done']);
-            } else {
-                return redirect()->back()->with(['error' => 'User not Registerd Successfully Done']);
-            }
         }
-        }
+        
     
 
-    public function clientsDetails($category_slug, $application_no)
+    public function clientsDetails($category_slug, $id)
     {
        
-        if ($category_slug === 'trademark') {
+    if ($category_slug === 'trademark') {
     $clientdetail = TrademarkUserModel::with([
     'attorney:id,attorneys_name',
     'mainCategory:id,category_name,category_slug',
@@ -170,19 +164,17 @@ class RegistrationController extends Controller
     'financialYear:id,financial_session',
     'subCategory:id,subcategory'
 ])
-->where('application_no', $application_no)
+->where('id', $id)
 ->first();
-
-
             return view('admin_panel.users.clientdetails', compact('clientdetail'));
         }
     }
 
-    public function editClientDetails($attorneyId, $categorySlug, $application_no)
+    public function editClientDetails($attorneyId, $categorySlug, $id)
     {
         $attorney = AttorneysModel::find($attorneyId);
 
-        $client = TrademarkUserModel::where('application_no', $application_no)->first();
+        $client = TrademarkUserModel::where('id', $id)->first();
         $category = MainCategoryModel::where('category_slug', $categorySlug)->first();
         $classes = TradeMarkClassModel::get();
         $offices = OfficesModel::where('status', 'yes')->get();
@@ -197,85 +189,19 @@ class RegistrationController extends Controller
 
         return view('admin_panel.users.editClientdetails', compact('client', 'attorney', 'category', 'classes', 'statuss', 'remarks', 'offices', 'clientRemarks', 'consultant', 'subcategory','dealWith'));
     }
-    // public function updateClientDetails($ApplicationNo, Request $request)
-    // {
-    //     // Validate the incoming request
-    //     $request->validate([
-    //         'attorney_id' => 'required',
-    //         'category_id' => 'required',
-    //         'application_no' => 'required',
-    //         'file_name' => 'required|string',
-    //         'trademark_name' => 'required|string',
-    //         'trademark_class' => 'required',
-    //         'filling_date' => 'required|date',
-    //         'phone_no' => 'required|digits:10',
-    //         'email_id' => 'required|email',
-    //         'date_of_application' => 'nullable|date',
-    //         'objected_hearing_date' => 'nullable|date',
-    //         // dynamic fileds rules 
-    //         'applicant_name'=>'nullable|string',
-    //         'applicant_code'=>'nullable|string',
-    //         'opponent_name'=>'nullable|string',
-    //         'opponent_code'=>'nullable|string',
-    //         'opponent_applicant' => 'nullable|string',
-    //         'hearing_date'=>'nullable|date',
-    //         'examination_report_submitted'=>'nullable|string',
-    //         'opposed_no'=>'nullable|string',
-    //         'rectification_no'=>'nullable|string',
-    //         // dynamic fileds rules 
-    //         'opposition_hearing_date' => 'nullable|date',
-    //         'status' => 'required',
-    //         'consultant' => 'required|string',
-    //         'deal_with' => 'nullable|string',
-    //         'filed_by' => 'nullable',
-    //         'client_remarks' => 'required',
-    //         'remarks' => 'required',
-    //         'sub_status' => 'required',
-    //         'office_id' => 'required',
-    //         'sub_category' => 'required',
-    //         'ip_field'=>'required|string',
-    //         'email_remarks'=>'nullable|string',
-    //         'evidence_last_date'=>'nullable|date',
-    //         'client_communication'=>'nullable|string',
-    //         'mail_recived_date'=>'nullable|date',
-    //         'mail_recived_date_2'=>'nullable|date',
-    //         'valid_up_to'=>'nullable|date'		
-    //     ]);
 
-    //     // Find the TrademarkUser by application number
-    //     $TrademarkUser = TrademarkUserModel::where('application_no', $ApplicationNo)->first();
-
-    //     // Check if the record exists
-    //     if (!$TrademarkUser) {
-    //         return redirect()->back()->with(['error' => 'User not found']);
-    //     }
-
-    //     // Fill the model with request data
-    //     $TrademarkUser->fill($request->all());
-
-    //     // Assign the financial year from the session
-    //     $TrademarkUser->financial_year = Session::get('id');
-
-    //     // Save the changes to the database
-    //     if ($TrademarkUser->save()) {
-    //         return redirect()->back()->with(['success' => 'User updated successfully']);
-    //     } else {
-    //         return redirect()->back()->with(['error' => 'User update failed']);
-    //     }
-    // }
-
-
-    public function updateClientDetails($applicationno, Request $request)
+    public function updateClientDetails($id, Request $request)
     {
+       
         $request->validate([
             'attorney_id' => 'required',
             'category_id' => 'required',
-            'application_no' => 'required|unique:trademark_users,application_no,' . $applicationno . ',application_no',
+            'application_no' => 'required',
             'file_name' => 'required|string',
             'trademark_name' => 'required|string',
             'trademark_class' => 'required',
             'filling_date' => 'required|date',
-            'phone_no' => 'required|digits:10',
+            'phone_no' => 'required',
             'email_id' => 'required|email',
             'date_of_application' => 'nullable|date',
             'objected_hearing_date' => 'nullable|date',
@@ -308,7 +234,7 @@ class RegistrationController extends Controller
         ]);
     
         // Retrieve the record
-        $TrademarkUser = TrademarkUserModel::where('application_no', $applicationno)->first();
+        $TrademarkUser = TrademarkUserModel::where('id', $id)->first();
         if (!$TrademarkUser) {
             return redirect()->back()->with(['error' => 'User not found']);
         }
@@ -327,7 +253,7 @@ class RegistrationController extends Controller
         // Update and handle response
         if ($TrademarkUser->update()) {
            updateStatusHistory([
-    'application_no' => $applicationno,
+    'id' => $id,
     'status' => $request->input('status'),
     'sub_status' => $request->input('sub_status'),
     'file_name' => $request->input('file_name')

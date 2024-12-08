@@ -11,6 +11,7 @@ use App\Models\ConsultantModel;
 use App\Models\SubcategoryModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
@@ -23,27 +24,27 @@ class DashboardController extends Controller
         $consultant = ConsultantModel::where('status', 'yes')->get();
         $subcategory = SubcategoryModel::get();
         $attoernyes=AttorneysModel::get();
-      
-
-$groupedData = TrademarkUserModel::with([
+        $groupedData = TrademarkUserModel::with([
             'mainCategory:*',
             'statusMain:*'
         ])->get();
 
+        $startDate = Carbon::now()->startOfDay();
+        $endDate = Carbon::now()->addWeek()->endOfDay();
+        $upcominglastdatevalidupto=TrademarkUserModel::with([
+            'Clientonsultant:id,consultant_name',
+             'statusMain:id,status_name',
+            'mainCategory:id,category_name'
+        ])->whereBetween('valid_up_to',[$startDate,$endDate])->get();
+        $upcominglastdateoppositionhearingdate=TrademarkUserModel::with([
+            'Clientonsultant:id,consultant_name',
+            'statusMain:id,status_name',
+            'mainCategory:id,category_name'
+        ])->whereBetween('opposition_hearing_date',[$startDate,$endDate])->get();
 
-
-        $trademarkuserrenewal = TrademarkUserModel::where('sub_category', 4)
-        ->join('consultant', 'trademark_users.consultant', '=', 'consultant.id')
-        ->join('main_category', 'trademark_users.category_id', '=', 'main_category.id')
-        ->select(
-            'trademark_users.*', 
-            'consultant.consultant_name as consultant_name',
-            'main_category.category_slug as category_slug' )
-            ->get();
-
-
-            
-        return view('admin_panel.dashboard',compact('attoernyes','trademarkuserrenewal','groupedData','mcategories','consultant','subcategory'));
+        $upcommingdates=['valid_upto'=>$upcominglastdatevalidupto,'opposition-hearing_date'=>$upcominglastdateoppositionhearingdate];
+                 
+        return view('admin_panel.dashboard',compact('attoernyes','groupedData','mcategories','consultant','subcategory','upcommingdates'));
     }
 
     /**

@@ -20,7 +20,8 @@ class AttorneysModel extends Model
         'profile_picture',
         'bio',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'status'
     ];
     public function trademarkUsers()
 {

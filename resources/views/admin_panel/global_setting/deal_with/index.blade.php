@@ -366,6 +366,32 @@
                     tableId: 'deallerTable', // Assign the table ID
                     dbtable: 'deal_with' // Assign the database table name
                 });
+
+
+
+
+                                    // block and unbloc code here
+        
+$('#deallerTable').on('click', '.blockButton', function(e) 
+        {
+    e.preventDefault();
+    let itemId = $(this).data('id'); 
+    let csrf = "{{ csrf_token() }}"; 
+    let route = "{{ route('admin.block-data') }}"; 
+    let dbtable = "deal_with"; 
+    let columnname = "status";
+    showConfirmAlert(route, csrf, dbtable, columnname, itemId);
+});
+    $('#deallerTable').on('click', '.blockButton', function(e) 
+        {
+    e.preventDefault();
+    let itemId = $(this).data('id'); 
+    let csrf = "{{ csrf_token() }}"; 
+    let route = "{{ route('admin.block-data') }}"; 
+    let dbtable = "deal_with"; 
+    let columnname = "status";
+    showConfirmAlert(route, csrf, dbtable, columnname, itemId);
+});
             });
         </script>
             

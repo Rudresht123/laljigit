@@ -7,11 +7,13 @@ use App\Models\SubcategoryModel;
 use App\Models\SubStatusModel;
 use App\Models\TrademarkUserModel;
 use App\Models\AttorneysModel;
+use App\Models\StatusHistory;
 use App\Models\StatusModel;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 
 class CustomFunctions extends Controller
@@ -23,8 +25,6 @@ class CustomFunctions extends Controller
             return response()->json($data);
         }
     }
- 
-    
       public function getClients(Request $request)
     {
         // Define the query with the required relationships
@@ -116,7 +116,14 @@ $formattedData = $data->transform(function ($item, $index) use ($start,$tableCol
     $rowData = ['DT_RowIndex' => $start + $index + 1]; // Add index
     
     foreach ($tableColumns as $tableColumn) {
+        if($tableColumn=='application_no'){
+            $rowData[$tableColumn] = '<a href="' . route('admin.attorney.clientDetails', [
+                'category_slug' => $item->mainCategory->category_slug,
+                'id' => $item->id
+            ]) . '">' .$item->$tableColumn . '</a>';
+        }else{
             $rowData[$tableColumn] = $item->$tableColumn;
+        }
     }
       $rowData['attorney_id'] = $item->attorney->attorneys_name ?? '';
     $rowData['status'] = $item->statusMain->status_name ?? '';
@@ -137,25 +144,25 @@ $formattedData = $data->transform(function ($item, $index) use ($start,$tableCol
                                 <div class="dropdown-menu">
                                     <a target="_blank" class="dropdown-item" href="' . route('admin.client-details.print-pdf', [
                                         'category_slug' => $item->mainCategory->category_slug,
-                                        'application_no' => $item->application_no
+                                        'id' => $item->id
                                     ]) . '">
                                         <i class="typcn typcn-document-add"></i> PDF Print
                                     </a>
                                     <a target="_blank" class="dropdown-item" href="' . route('admin.attorney.edit-clientDetails', [
                                         'attoerny_id' => $item->attorney_id,
                                         'category_slug' => $item->mainCategory->category_slug,
-                                        'application_no' => $item->application_no
+                                        'id' => $item->id
                                     ]) . '">
                                         <i class="typcn typcn-edit"></i> Update Status
                                     </a>
                                     <a target="_blank" class="dropdown-item" href="' . route('admin.status.client-status', [
-                                        'application_no' => $item->application_no
+                                        'id' => $item->id
                                     ]) . '">
                                         <i class="typcn typcn-document-add"></i> Status Details
                                     </a>
                                     <a class="dropdown-item" href="' . route('admin.attorney.clientDetails', [
                                         'category_slug' => $item->mainCategory->category_slug,
-                                        'application_no' => $item->application_no
+                                        'id' => $item->id
                                     ]) . '">
                                         <i class="typcn typcn-edit"></i> Client Details
                                     </a>
@@ -173,9 +180,6 @@ $formattedData = $data->transform(function ($item, $index) use ($start,$tableCol
             'data' => $formattedData,              // Current page's data
         ]);
     }
-    
-    
-    
     public function getClientDetailsForUpdateStatus(Request $request)
     {
         // Validate the request data
@@ -221,7 +225,6 @@ $formattedData = $data->transform(function ($item, $index) use ($start,$tableCol
             'clientDetails' => $clientDetails
         ], 200);
     }
-    
     public function UpdateClientStatus(Request $request)
     {
         // Define validation rules for both fetching and updating status
@@ -274,11 +277,6 @@ $formattedData = $data->transform(function ($item, $index) use ($start,$tableCol
             'clientDetails' => $clientDetails
         ], 200);
     }
-
-
-
-   
-
     public function searchCleint(Request $request) {
         if ($request->input('inputText')) {
             $searchValue = trim($request->input('inputText'));
@@ -299,42 +297,26 @@ $formattedData = $data->transform(function ($item, $index) use ($start,$tableCol
         // Return a response if no inputText is provided
         return response()->json(['message' => 'Please provide a search query.']);
     }
-    
     //client details of search
     public function searchClientDetails(Request $request)
     {
-    $application_no = $request->input('application_no');
-    
-    // Perform some action, then redirect to client details page
-   
-     
-   
-    
+    $client_id = $request->input('client_id'); 
     return redirect()->route('admin.attorney.clientDetails', [
         'category_slug' => 'trademark',
-        'application_no' => $application_no
+        'id' => $client_id
     ]);
     }
-
     // update client status based on conditional fields
     public function getUpdateStatusConditionalFields($slug,$application_no){
         echo $application_no;
         echo $slug;
     }
-    
-    
-    
-    // Get CLient Status Attorney Chart Status Wise
-    
-    
-       // show client data according to attoerny count chart
     public function getAttoernyStatusWiseData($attorneyId,$category,$statusId){
         $attorney=AttorneysModel::find($attorneyId);
         $status=StatusModel::find($statusId);
 
         return view('admin_panel.reports.client_reports_status_wise_chart',compact('attorney','category','status'));
     }
-    
       public function getAttoernyChartCountStatusWiseData(Request $request){
         if($request->input('category_slug') == 'trademark'){
         $query = TrademarkUserModel::with([
@@ -407,10 +389,14 @@ if ($request->filled('search.value')) {
                                     
         // Format the data
         $formattedData = $data->transform(function ($item, $index) use ($start) {
+        
             return [
                 'DT_RowIndex' => $start + $index + 1,
                 'id' => $item->id,
-                'application_no' => $item->application_no,
+                'application_no' => '<a href="' . route('admin.attorney.clientDetails', [
+                    'category_slug' => $item->mainCategory->category_slug,
+                    'id' => $item->id
+                ]) . '">' . $item->application_no . '</a>',
                 'file_name' => $item->file_name,
                 'trademark_name' => $item->trademark_name,
                 'phone_no' => $item->phone_no, // Include phone_no
@@ -427,22 +413,22 @@ if ($request->filled('search.value')) {
                                    
                                     <a target="_blank" class="dropdown-item" href="' . route('admin.client-details.print-pdf', [
                                         'category_slug' => $item->mainCategory->category_slug,
-                                        'application_no' => $item->application_no
+                                        'id' => $item->id
                                     ]) . '">
                                         <i class="typcn typcn-document-add"></i> PDF Print
                                     </a>
                                  
-                                     <a target="_blank" class="dropdown-item" href="' . route('admin.attorney.edit-clientDetails',['attoerny_id'=>$item->attorney_id,'category_slug'=>$item->mainCategory->category_slug,'application_no'=>$item->application_no]) . '">
+                                     <a target="_blank" class="dropdown-item" href="' . route('admin.attorney.edit-clientDetails',['attoerny_id'=>$item->attorney_id,'category_slug'=>$item->mainCategory->category_slug,'id'=>$item->id]) . '">
                                         <i class="typcn typcn-edit"></i> Update Status
                                     </a>
                                     <a target="_blank" class="dropdown-item" href="' . route('admin.status.client-status', [
-                                        'application_no' => $item->application_no
+                                        'id' => $item->id
                                     ]) . '">
                                         <i class="typcn typcn-document-add"></i> Status Details
                                     </a>
                                     <a class="dropdown-item" href="' . route('admin.attorney.clientDetails', [
                                         'category_slug' => $item->mainCategory->category_slug,
-                                        'application_no' => $item->application_no
+                                        'id' => $item->id
                                     ]) . '">
                                         <i class="typcn typcn-edit"></i> Client Details
                                     </a>
@@ -464,9 +450,125 @@ if ($request->filled('search.value')) {
             'status'=> 'Not Data Found',
         ]);
     }
-    }   
- 
+    } 
+    // block data function start here
+    public function blockData(Request $request)
+    {
+        // Validate request data
+        $request->validate([
+            'dbtable' => 'required|string',
+            'columnname' => 'required|string',
+            'itemId' => 'required|integer',
+        ]);
+        $dbTable = $request->input('dbtable');
+        $columnName = $request->input('columnname');
+        $itemId = $request->input('itemId');
+        $itemData = DB::table($dbTable)->where('id', $itemId)->first();
     
+        if (!$itemData) {
+            return response()->json(['success' => false, 'message' => 'Item not found.']);
+        }
+        $newValue = ($itemData->$columnName === 'yes') ? 'no' : 'yes';
+        $updated = DB::table($dbTable)
+            ->where('id', $itemId)
+            ->update([$columnName => $newValue]);
     
+        if ($updated) {
+            return response()->json(['success' => true, 'message' => 'Item updated successfully.']);
+        }
     
+        return response()->json(['success' => false, 'message' => 'Failed to update the item.']);
+    }
+
+    // for another opposed number
+    public function SaveDataForAnotherOpposedNumber(Request $request)
+    {
+       
+        $request->validate([
+            'attorney_id' => 'required',
+            'category_id' => 'required',
+            'application_no' => 'required',
+            'file_name' => 'required|string',
+            'trademark_name' => 'required|string',
+            'trademark_class' => 'required',
+            'filling_date' => 'required|date',
+            'phone_no' => 'required|digits:10',
+            'email_id' => 'required|email',
+            'date_of_application' => 'nullable|date',
+            'objected_hearing_date' => 'nullable|date',
+            // dynamic fileds rules 
+            'applicant_name'=>'nullable|string',
+            'applicant_code'=>'nullable|string',
+            'opponent_name'=>'nullable|string',
+            'opponent_code'=>'nullable|string',
+            'opponent_applicant' => 'nullable|string',
+            'hearing_date'=>'nullable|date',
+            'examination_report_submitted'=>'nullable|string',
+            'opposed_no'=>'nullable|string',
+            'rectification_no'=>'nullable|string',
+            // dynamic fileds rules 
+            'opposition_hearing_date' => 'nullable|date',
+            'status' => 'required',
+            'consultant' => 'required|string',
+            'deal_with' => 'nullable|string',
+            'filed_by' => 'nullable',
+            'client_remarks' => 'required',
+            'remarks' => 'required',
+            'sub_status' => 'required',
+            'office_id' => 'required',
+            'sub_category' => 'required',
+            'ip_field'=>'required|string',
+            'email_remarks'=>'nullable|string',
+            'evidence_last_date'=>'nullable|date',
+            'client_communication'=>'nullable|string',
+            'mail_recived_date'=>'nullable|date',
+            'mail_recived_date_2'=>'nullable|date',
+            'valid_up_to'=>'nullable|date'		
+        ]);
+
+        $application_no=$request->input('application_no');
+        $TrademarkUser = new TrademarkUserModel();
+        $TrademarkUser->fill($request->all());
+        $clientEmail=$request->email_id;
+        $TrademarkUser['financial_year'] = Session::get('id');
+        $TrademarkUser['opposed_no'] = "";
+
+    // dynamic fields code here
+    if ($request->filled('opponent_applicant')) {
+        $TrademarkUser['opponent_applicant'] = $request->input('opponent_applicant');
+        if ($TrademarkUser['opponent_applicant'] === 'Applicant') {
+            $TrademarkUser['opponenet_applicant_name'] = $request->input('opponent_name');
+            $TrademarkUser['opponent_applicant_code'] = $request->input('opponent_code');
+        } elseif ($TrademarkUser['opponent_applicant'] === 'Opponent') {
+            $TrademarkUser['opponenet_applicant_name'] = $request->input('applicant_name');
+            $TrademarkUser['opponent_applicant_code'] = $request->input('applicant_code');
+        }
+    }
+    
+    // dynamic fileds code end here
+        if ($TrademarkUser->save()) {
+            echo $TrademarkUser->id;
+
+            StatusHistory::create([
+                'client_id' => $TrademarkUser->id,
+                'file_name'=>$request->input('file_name'), 
+                'status_history' => json_encode([
+                    [
+                        'status' => $request->input('status'),
+                        'sub_status' => $request->input('sub_status'),
+                        'date' => now()->toDateTimeString(),
+                    ]
+                ]),
+            ]);
+            return redirect()->route('admin.attorney.edit-clientDetails', [
+                'attoerny_id' => $TrademarkUser->attorney_id,
+                'category_slug' => 'trademark',
+                'id' => $TrademarkUser->id
+            ])->with(['success' => 'User Registered Successfully Done']);
+            
+        }
+    else{
+        return redirect()->back()->with(['error' => 'User not Registerd Successfully Done']);
+    }
+        }
 }

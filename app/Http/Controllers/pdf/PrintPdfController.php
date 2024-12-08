@@ -9,7 +9,7 @@ use App\Models\TrademarkUserModel;
 
 class PrintPdfController extends Controller
 {
-    public function printClientPdf($category_slug, $application_no)
+    public function printClientPdf($category_slug, $id)
     {
 
 
@@ -27,7 +27,7 @@ class PrintPdfController extends Controller
             'dealWith:id,dealler_name',
             'subCategory:id,subcategory',
             'financialYear:id,financial_session'
-            )->where('application_no',$application_no)->first();
+            )->where('id',$id)->first();
                 
 
         // Fetch the email template

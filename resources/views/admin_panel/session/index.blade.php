@@ -407,6 +407,31 @@
                 tableId: 'sessionTable', // Assign the table ID
                 dbtable: 'financial_year' // Assign the database table name
             });
+
+            // block unbloc code hereunBlockButton
+             // block unbloc code here
+             $('#sessionTable').on('click', '.blockButton', function(e) 
+        {
+    e.preventDefault();
+    let itemId = $(this).data('id'); 
+    let csrf = "{{ csrf_token() }}"; 
+    let route = "{{ route('admin.block-data') }}"; 
+    let dbtable = "financial_year"; 
+    let columnname = "is_active";
+    showConfirmAlert(route, csrf, dbtable, columnname, itemId);
+});
+    $('#sessionTable').on('click', '.blockButton', function(e) 
+        {
+    e.preventDefault();
+    let itemId = $(this).data('id'); 
+    let csrf = "{{ csrf_token() }}"; 
+    let route = "{{ route('admin.block-data') }}"; 
+    let dbtable = "financial_year"; 
+    let columnname = "is_active";
+    showConfirmAlert(route, csrf, dbtable, columnname, itemId);
+});
+         
+         
         });
     </script>
 @endsection

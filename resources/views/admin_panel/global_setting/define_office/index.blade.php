@@ -32,7 +32,7 @@
                 </div>
 
                 <div class="col-lg-10 vhr">
-                    
+
                     <div class="table-responsive">
                         <table id="officeTable" class="table table-hover   fs-10 w-100">
                             <thead class="bg-light fw-bold">
@@ -44,11 +44,11 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            
+
                             </tbody>
                         </table>
                     </div>
-                   
+
                 </div>
             </div>
 
@@ -83,8 +83,7 @@
                     <form id="addNewOffice" method="POST">
                         @csrf
                         <div class="gorm-group ">
-                            <label for="" class="form-label">Office Name <span
-                                    class="text-danger">*</span></label>
+                            <label for="" class="form-label">Office Name <span class="text-danger">*</span></label>
                             <input type="text" name="office_name" autocomplete="off" class="form-control input-sm"
                                 required placeholder="Enter Office name">
                         </div>
@@ -119,22 +118,18 @@
                     <form id="editOfficeForm" method="POST">
                         @csrf
                         <div class="gorm-group hidden">
-                            <label for="" class="form-label">Office ID <span
-                                    class="text-danger">*</span></label>
-                            <input type="text" id="office_id" readonly name="office_id"
-                                autocomplete="off" class="form-control input-sm" required
-                                placeholder="Enter Your Office name...">
+                            <label for="" class="form-label">Office ID <span class="text-danger">*</span></label>
+                            <input type="text" id="office_id" readonly name="office_id" autocomplete="off"
+                                class="form-control input-sm" required placeholder="Enter Your Office name...">
                         </div>
                         <div class="gorm-group hidden">
                             <label for="" class="form-label">Office Name <span
                                     class="text-danger">*</span></label>
-                            <input type="text" id="office_name"  name="office_name"
-                                autocomplete="off" class="form-control input-sm" required
-                                placeholder="Enter Your Office name...">
+                            <input type="text" id="office_name" name="office_name" autocomplete="off"
+                                class="form-control input-sm" required placeholder="Enter Your Office name...">
                         </div>
                         <div class="gorm-group ">
-                            <label for="" class="form-label">Status<span
-                                    class="text-danger">*</span></label>
+                            <label for="" class="form-label">Status<span class="text-danger">*</span></label>
                             <select name="status" class="form-select" id="">
                                 <option value="yes">Active</option>
                                 <option value="no">De-Active</option>
@@ -213,11 +208,11 @@
             });
 
             // Handle Edit Button Click
-            $('#officeTable').on('click','.editButton', function(e) {
+            $('#officeTable').on('click', '.editButton', function(e) {
                 e.preventDefault();
                 let officeId = $(this).data('id');
                 let route = "{{ route('admin.global_setting.edit-office', ':id') }}".replace(':id',
-                officeId);
+                    officeId);
 
                 $.ajax({
                     url: route,
@@ -239,7 +234,8 @@
             $('#editOfficeForm').on('submit', function(e) {
                 e.preventDefault();
                 let officeId = $('#office_id').val(); // Get the year ID again if needed
-                let route = "{{ route('admin.global_setting.edit-office', ':id') }}".replace(':id',officeId);
+                let route = "{{ route('admin.global_setting.edit-office', ':id') }}".replace(':id',
+                    officeId);
                 let formData = $(this).serialize();
 
                 $.ajax({
@@ -285,7 +281,7 @@
                     }
                 });
             });
-            $('#officeTable').on('click','.deletebutton', function(e) {
+            $('#officeTable').on('click', '.deletebutton', function(e) {
                 e.preventDefault();
                 Swal.fire({
                     title: 'Are you sure?',
@@ -347,39 +343,60 @@
     </script>
 
 
- {{-- /datatable initialization --}}
- <script type="text/javascript">
-    $(document).ready(function() {
-        let route = "{{ route('admin.common.datatable') }}";
-        let csrf = "{{ csrf_token() }}";
+    {{-- /datatable initialization --}}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            let route = "{{ route('admin.common.datatable') }}";
+            let csrf = "{{ csrf_token() }}";
 
-        let columnsDefinition = [{
-                data: 'id',
-                name: 'id'
-            },
-            {
-                data: 'office_name',
-                name: 'office_name'
-            },
-            {
-                data: 'status',
-                name: 'status'
-            },
-            {
-                data: 'actions',
-                name: 'actions',
-                orderable: false,
-                searchable: false
-            }
-        ];
+            let columnsDefinition = [{
+                    data: 'id',
+                    name: 'id'
+                },
+                {
+                    data: 'office_name',
+                    name: 'office_name'
+                },
+                {
+                    data: 'status',
+                    name: 'status'
+                },
+                {
+                    data: 'actions',
+                    name: 'actions',
+                    orderable: false,
+                    searchable: false
+                }
+            ];
 
-        intializeCustomDatatable({
-            route: route, // Correctly assign the route
-            csrf: csrf, // Correctly assign the CSRF token
-            columnsDefinition: columnsDefinition, // Assign columnsDefinition
-            tableId: 'officeTable', // Assign the table ID
-            dbtable: 'offices' // Assign the database table name
+            intializeCustomDatatable({
+                route: route, // Correctly assign the route
+                csrf: csrf, // Correctly assign the CSRF token
+                columnsDefinition: columnsDefinition, // Assign columnsDefinition
+                tableId: 'officeTable', // Assign the table ID
+                dbtable: 'offices' // Assign the database table name
+            });
+
+            // block and unbloc code here
+
+            $('#officeTable').on('click', '.blockButton', function(e) {
+                e.preventDefault();
+                let itemId = $(this).data('id');
+                let csrf = "{{ csrf_token() }}";
+                let route = "{{ route('admin.block-data') }}";
+                let dbtable = "offices";
+                let columnname = "status";
+                showConfirmAlert(route, csrf, dbtable, columnname, itemId);
+            });
+            $('#officeTable').on('click', '.blockButton', function(e) {
+                e.preventDefault();
+                let itemId = $(this).data('id');
+                let csrf = "{{ csrf_token() }}";
+                let route = "{{ route('admin.block-data') }}";
+                let dbtable = "offices";
+                let columnname = "status";
+                showConfirmAlert(route, csrf, dbtable, columnname, itemId);
+            });
         });
-    });
-</script>
+    </script>
 @endsection

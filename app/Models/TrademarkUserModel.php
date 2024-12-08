@@ -108,6 +108,6 @@ class TrademarkUserModel extends Model
     }
     public function statusHistories()
 {
-    return $this->belongsTo(StatusHistory::class, 'application_no', 'application_no');
+    return $this->hasOne(StatusHistory::class,'client_id','id');
 }
 }

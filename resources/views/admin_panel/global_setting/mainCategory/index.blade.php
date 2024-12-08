@@ -49,7 +49,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                              
+
                             </tbody>
                         </table>
                     </div>
@@ -254,7 +254,7 @@
 
 
             // Handle Edit Button Click
-            $('#mainCategorytable').on('click','.editButton', function(e) {
+            $('#mainCategorytable').on('click', '.editButton', function(e) {
                 e.preventDefault();
                 let categoryId = $(this).data('id');
                 let route = "{{ route('admin.global-setting.edit-main-category', ':id') }}".replace(':id',
@@ -337,7 +337,7 @@
             });
 
 
-            $('#mainCategorytable').on('click','.deletebutton', function(e) {
+            $('#mainCategorytable').on('click', '.deletebutton', function(e) {
                 e.preventDefault();
                 let categoryId = $(this).data('id');
                 let route = "{{ route('admin.global-setting.delete-main-category', ':id') }}".replace(
@@ -438,6 +438,27 @@
                 columnsDefinition: columnsDefinition, // Assign columnsDefinition
                 tableId: 'mainCategorytable', // Assign the table ID
                 dbtable: 'main_category' // Assign the database table name
+            });
+
+
+            // block and unbloc code here
+            $('#mainCategorytable').on('click', '.blockButton', function(e) {
+                e.preventDefault();
+                let itemId = $(this).data('id');
+                let csrf = "{{ csrf_token() }}";
+                let route = "{{ route('admin.block-data') }}";
+                let dbtable = "main_category";
+                let columnname = "status";
+                showConfirmAlert(route, csrf, dbtable, columnname, itemId);
+            });
+            $('#mainCategorytable').on('click', '.blockButton', function(e) {
+                e.preventDefault();
+                let itemId = $(this).data('id');
+                let csrf = "{{ csrf_token() }}";
+                let route = "{{ route('admin.block-data') }}";
+                let dbtable = "main_category";
+                let columnname = "status";
+                showConfirmAlert(route, csrf, dbtable, columnname, itemId);
             });
         });
     </script>

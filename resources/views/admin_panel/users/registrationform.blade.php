@@ -194,7 +194,7 @@
                                         <select name="status" id="status" required class="form-select" id="">
                                             <option value="">**Please Select Status</option>
                                             @foreach ($statuss as $status)
-                                                <option data-slug="{{ $status->slug ?? '' }}"
+                                                <option class="capitalize" data-slug="{{ $status->slug ?? '' }}"
                                                     data-id="{{ $status->id }}"
                                                     value="{{ $status->id ? $status->id : '' }}">
                                                     {{ $status->status_name ? $status->status_name : '' }}</option>
@@ -320,7 +320,7 @@
                                             id="">
                                             <option value="">**Please Select Sub-Category</option>
                                             @foreach ($subcategory as $subcat)
-                                                <option value="{{ $subcat->id ? $subcat->id : '' }}">
+                                                <option class="capitalize" value="{{ $subcat->id ? $subcat->id : '' }}">
                                                     {{ $subcat->subcategory ? $subcat->subcategory : '' }}</option>
                                             @endforeach
 
@@ -339,7 +339,7 @@
                                         <select name="consultant" required class="form-select" id="consultant">
                                             <option value="">**Please Select Consultant Name..</option>
                                             @foreach ($consultant as $consultant)
-                                                <option value="{{ $consultant->id ?? '' }}">
+                                                <option class="capitalize" value="{{ $consultant->id ?? '' }}">
                                                     {{ $consultant->consultant_name ?? '' }}</option>
                                             @endforeach
                                         </select>
@@ -352,7 +352,7 @@
                                         <select name="deal_with" required class="form-select" id="deal_with">
                                             <option value="">**Please Select Dealler Name..</option>
                                             @foreach ($dealWith as $dealw)
-                                                <option value="{{ $dealw->id ?? '' }}">{{ $dealw->dealler_name ?? '' }}
+                                                <option class="capitalize" value="{{ $dealw->id ?? '' }}">{{ $dealw->dealler_name ?? '' }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -370,7 +370,7 @@
                                         <select name="remarks" required class="form-select select2" id="remarks">
                                             <option value="">**Please Select Remarks</option>
                                             @foreach ($remarks as $remark)
-                                                <option value="{{ $remark->id ? $remark->id : '' }}">
+                                                <option class="capitalize" value="{{ $remark->id ? $remark->id : '' }}">
                                                     {{ $remark->remarks ? $remark->remarks : '' }}</option>
                                             @endforeach
                                         </select>
@@ -380,7 +380,7 @@
                                         <select name="client_remarks" required class="form-control select2 " id="client_remarks">
                                             <option value="">**Please Select Remarks</option>
                                             @foreach ($clientRemarks as $cleintRemark)
-                                                <option value="{{ $cleintRemark->id ? $cleintRemark->id : '' }}">
+                                                <option class="capitalize" value="{{ $cleintRemark->id ? $cleintRemark->id : '' }}">
                                                     {{ $cleintRemark->client_remarks ? $cleintRemark->client_remarks : '' }}
                                                 </option>
                                             @endforeach

@@ -288,7 +288,11 @@
     <div class=" content-fixed">
         <div class="container-fluid p-2 p-md-3 m-0 p-0">
 
-
+{{-- spinner --}}
+<div id="spinner-loader" class="spinner-border" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+  {{--spinner  --}}
             {{-- loader section start here --}}
             <div id="overlay"></div>
             <div id="ld" class="ld text-center" style="display: none;">

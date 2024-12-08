@@ -7,18 +7,18 @@ if (!function_exists('updateStatusHistory')) {
      function updateStatusHistory(array $data)
     {
         
-    $applicationno = $data['application_no'];
+    $id = $data['id'];
     $status = $data['status'];
     $sub_status = $data['sub_status'];
     $fileName = $data['file_name'];
        
-        $statusHistory = StatusHistory::where('application_no', $applicationno)->first();
+        $statusHistory = StatusHistory::where('client_id', $id)->first();
        
         if(!$statusHistory){
 
                 StatusHistory::create([
-                    'application_no' => $applicationno,
-                    'file_name'=>$file_name, 
+                    'client_id' => $id,
+                    'file_name'=>$fileName, 
                     'status_history' => json_encode([
                         [
                             'status' => $status,

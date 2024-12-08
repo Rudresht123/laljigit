@@ -424,6 +424,28 @@
                 tableId: 'statusTable', // Assign the table ID
                 dbtable: 'status' // Assign the database table name
             });
+            
+            // block and unbloc code here
+    $('#statusTable').on('click', '.blockButton', function(e) 
+        {
+    e.preventDefault();
+    let itemId = $(this).data('id'); 
+    let csrf = "{{ csrf_token() }}"; 
+    let route = "{{ route('admin.block-data') }}"; 
+    let dbtable = "status"; 
+    let columnname = "status";
+    showConfirmAlert(route, csrf, dbtable, columnname, itemId);
+});
+    $('#statusTable').on('click', '.blockButton', function(e) 
+        {
+    e.preventDefault();
+    let itemId = $(this).data('id'); 
+    let csrf = "{{ csrf_token() }}"; 
+    let route = "{{ route('admin.block-data') }}"; 
+    let dbtable = "status"; 
+    let columnname = "status";
+    showConfirmAlert(route, csrf, dbtable, columnname, itemId);
+});
         });
     </script>
         

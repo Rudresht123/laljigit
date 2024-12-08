@@ -29,12 +29,18 @@ Route::post('/admin/get/search-cleint-details',[CustomFunctions::class,'searchCl
 
 
 // Status History Column start here
-Route::get('admin/client/status-history/{application_no}',[StatusHistoryController::class,'getStatusHistory'])->name('admin.status.client-status')->middleware(['auth','verified']);
+Route::get('admin/client/status-history/{id}',[StatusHistoryController::class,'getStatusHistory'])->name('admin.status.client-status')->middleware(['auth','verified']);
 
 
 // Update status Controller For The Main Status With Dynamic COnditional Fields
 Route::get('admin/{slug}/client/update-status/{application_no}',[CustomFunctions::class,'getUpdateStatusConditionalFields'])->name('admin.status.UpdateStatusConditionalFields')->middleware(['auth','verified']);
 
+
+// Update status Controller For The Main Status With Dynamic COnditional Fields
+Route::post('admin/block-data',[CustomFunctions::class,'blockData'])->name('admin.block-data')->middleware(['auth','verified']);
+
+// Add same data in second time for the second opposed number
+Route::post('admin/save-data-form-other-opposed',[CustomFunctions::class,'SaveDataForAnotherOpposedNumber'])->name('admin.SaveDataForAnotherOpposedNumber')->middleware(['auth','verified']);
 
 
 

@@ -66,7 +66,7 @@
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
+                confirmButtonText: 'Yes, Logout it!'
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
@@ -391,11 +391,15 @@ $(document).ready(function() {
 <script src="{{ asset('../../assets/lib/datatables.net-dt/js/dataTables.dataTables.min.js')}}"></script>
 <script src="{{ asset('../../assets/lib/datatables.net-responsive/js/dataTables.responsive.min.js')}}"></script>
 <script src="{{ asset('../../assets/lib/datatables.net-responsive-dt/js/responsive.dataTables.min.js')}}"></script>
+<script src="{{ asset('../../assets/lib/typeahead/bloodhound.min.js')}}"></script>
+<script src="{{ asset('../../assets/lib/typeahead/typeahead.jquery.min.js')}}"></script>
+<script src="{{ asset('../../assets/lib/typeahead/typeahead.bundle.min.js')}}"></script>
 
 <script src="{{ asset('../../assets/js/custom.js') }}"></script>
 <script src="{{ asset('../../assets/js/chart.js')}}"></script>
 <script src="{{ asset('../../assets/js/datatable.js')}}"></script>
 <script src="{{ asset('../../assets/js/options.js')}}"></script>
+<script src="{{ asset('../../assets/js/search.js')}}"></script>
 </body>
 
 </html>

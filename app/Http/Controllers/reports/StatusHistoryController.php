@@ -10,8 +10,12 @@ use Illuminate\Http\Request;
 
 class StatusHistoryController extends Controller
 {
-    public function getStatusHistory($application_no){
-        $statusHistory = TrademarkUserModel::with('statusHistories')->where('application_no', $application_no)->first();
+    public function getStatusHistory($id){
+      
+       $statusHistory = TrademarkUserModel::with('statusHistories')
+    ->where('id', $id)
+    ->first();
+    
         $status=StatusModel::where('status','yes')->get();
         $substatus=SubStatusModel::where('status','yes')->get();
 
