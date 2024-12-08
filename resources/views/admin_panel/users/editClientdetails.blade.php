@@ -613,10 +613,7 @@
                 }
             })();
 
-            $('#anotherOpposed').on('click',function(e){
-                e.preventDefault();
-                alert("Hello");
-            });
+          
         });
     </script>
     <script>
