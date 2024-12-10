@@ -70,11 +70,7 @@ class ClientsImport implements ToModel, WithHeadingRow, WithChunkReading
             return null; // Skip this row
         }
     
-        // Check if application_no already exists
-        if (TrademarkUserModel::where('application_no', $row['application_no'])->exists()) {
-            Log::info("Skipping row with duplicate application_no: " . $row['application_no']);
-            return null; // Skip this row
-        }
+       
     
         // Ensure deal_with is a string
        
@@ -87,18 +83,18 @@ class ClientsImport implements ToModel, WithHeadingRow, WithChunkReading
             'file_name' => $row['file_name'],
             'trademark_name' => $row['trademark_name'],
             'trademark_class' => $row['trademark_class'] ?? '1',
-            'filling_date' => $row['filling_date'] ?? '2024-12-02',
+            'filling_date' => formatDate($row['filling_date'],'Y-m-d') ?? '2024-12-02',
             'phone_no' => $row['phone_no'],
             'email_id' => $row['email_id'],
-            'objected_hearing_date' => $row['objected_hearing_date'],
+            'objected_hearing_date' => formatDate($row['objected_hearing_date'],'Y-m-d'),
             'opponenet_applicant_name' => $row['opponenet_applicant_name'],
             'opponent_applicant_code' => $row['opponent_applicant_code'],
             'opponent_applicant' => $row['opponent_applicant'],
-            'hearing_date' => $row['hearing_date'],
+            'hearing_date' => formatDate($row['hearing_date'],'Y-m-d'),
             'examination_report' => $row['examination_report'],
             'opposed_no' => $row['opposed_no'],
             'rectification_no' => $row['rectification_no'],
-            'opposition_hearing_date' => $row['opposition_hearing_date'],
+            'opposition_hearing_date' => formatDate($row['opposition_hearing_date'],'Y-m-d'),
             'status' => $row['status'],
             'consultant' => $row['consultant'],
             $row['deal_with'] = (string) ($row['deal_with'] ?? ''),
@@ -110,24 +106,25 @@ class ClientsImport implements ToModel, WithHeadingRow, WithChunkReading
             'sub_category' => $row['sub_category'],
             'ip_field' => $row['ip_field'],
             'email_remarks' => $row['email_remarks'],
-            'evidence_last_date' => $row['evidence_last_date'],
+            'evidence_last_date' => formatDate($row['evidence_last_date'],'Y-m-d'),
             'client_communication' => $row['client_communication'],
-            'mail_recived_date' => $row['mail_recived_date'],
-            'mail_recived_date_2' => $row['mail_recived_date_2'],
-            'valid_up_to' => $row['valid_up_to'],
+            'mail_recived_date' => formatDate($row['mail_recived_date'],'Y-m-d'),
+            'mail_recived_date_2' => formatDate($row['mail_recived_date_2'],'Y-m-d'),
+            'valid_up_to' => formatDate($row['valid_up_to'],'Y-m-d'),
             'financial_year' => $row['financial_year'],
         ]);
         $trademarkUser->save();
     
         // Save status history
         StatusHistory::create([
-            'application_no' => $row['application_no'],
+            'client_id' =>$trademarkUser->id,
             'file_name' => $row['file_name'],
             'status_history' => json_encode([
                 [
                     'status' => $row['status'],
                     'sub_status' => $row['sub_status'],
-                    'date' => $row['filling_date'],
+                    'date' => formatDate($row['filling_date'],'Y-m-d'),
+                   'time' => now()->toDateString(),
                 ],
             ]),
         ]);

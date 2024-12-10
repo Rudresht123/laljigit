@@ -16,10 +16,10 @@ class ClientsReports extends Controller
 {
     public function Clients(){
        
-            $attorneys = AttorneysModel::all();
+            $attorneys = AttorneysModel::where('status', 'yes')->get();
             $statuss = StatusModel::where('status', 'yes')->get();
             $mcategories = MainCategoryModel::where('status', 'yes')->get();
-            $subcategory = SubcategoryModel::get();
+            $subcategory = SubcategoryModel::where('status', 'yes')->get();
         
                    $columns = ExcelColumnNameModel::where('status','yes')->get();
            

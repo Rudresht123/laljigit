@@ -38,7 +38,7 @@
                                 <tr class="py-3">
                                     <th class="fw-bold">Status name</th>
                                     <th class="fw-bold">Remark</th>
-                                    <th class="fw-bold">SLug</th>
+                                    <th class="fw-bold">Slug</th>
                                     <th class="fw-bold">Status</th>
                                     <th class="fw-bold">Action</th>
                                    

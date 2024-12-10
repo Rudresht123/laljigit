@@ -68,7 +68,7 @@
             <div class="custom-card">
                 <div class="panel  m-0 p-0  panel-default">
                     <div class="panel-heading border-bottom mb-2">
-                        <h6 class="tx-14 m-0 p-0"><b class="d-flex"><i class="far fa-address-book"></i> Attorneys Vise
+                        <h6 class="tx-14 m-0 p-0"><b class="d-flex"><i class="far fa-address-book me-1"></i> Attorneys Wise
                                 Clients Summary</b></h6>
                     </div>
                     <div class="panel-body  pt-0">
@@ -161,7 +161,7 @@
             <div class="custom-card">
                 <div class="panel m-0 p-0  panel-default">
                     <div class="panel-heading  border-bottom mb-2">
-                        <h6 class="tx-14 m-0 p-0"><b class="d-flex"><i class="far fa-address-book"></i> Upcoming
+                        <h6 class="tx-14 m-0 p-0"><b class="d-flex"><i class="far fa-address-book me-1"></i> Upcoming
                                 Last Date</b></h6>
                     </div>
                     <div class="panel-body  pt-0">
@@ -203,6 +203,7 @@
                                                             <th class="text-bold"><b>Valid Upto</b></th>
                                                             <th class="text-bold"><b>Status</b></th>
                                                             <th class="text-bold"><b>Opposition Hearing Date</b></th>
+                                                            <th class="text-bold"><b>Hearing Date</b></th>
 
                                                         </tr>
                                                     </thead>
@@ -227,6 +228,7 @@
                                                             <td>{{ $upcommingdate->mainCategory->category_name ?? '' }}</td>
                                                             <td>{{ $upcommingdate->valid_up_to ?? '' }}</td>
                                                             <td>{{ $upcommingdate->opposition_hearing_date ?? '' }}</td>
+                                                            <td>{{ $upcommingdate->hearing_date ?? '' }}</td>
                                                         </tr>
                                                         @endif
                                                         @endforeach
@@ -270,7 +272,7 @@
                     <div class="panel-heading border-bottom mb-2">
                         <h6 class="tx-14 m-0 p-0">
                             <b class="d-flex">
-                                <i class="far fa-address-book"></i> Category Vise Clients Summary
+                                <i class="far fa-address-book me-1"></i> Category Vise Clients Summary
                             </b>
                         </h6>
                     </div>
@@ -288,7 +290,7 @@
                     <div class="panel-heading border-bottom mb-2">
                         <h6 class="tx-14 m-0 p-0">
                             <b class="d-flex">
-                                <i class="far fa-address-book"></i> Status Vise Clients Summary
+                                <i class="far fa-address-book me-1"></i> Status Vise Clients Summary
                             </b>
                         </h6>
                     </div>

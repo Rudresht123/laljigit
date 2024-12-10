@@ -97,7 +97,7 @@
                                 </div>
 
                                 <div class="col-lg-6">
-                                    <div class="row mb-2"><div class=" pt-2 col-4 fs-10"><b>Client_remarks</b></div><div class="col-8"><div class="bg-light ht-35 p-2 fs-10">{{$clientdetail->clientRemark->client_remarks ?? ''}}</div></div></div>
+                                    <div class="row mb-2"><div class=" pt-2 col-4 fs-10"><b>Whatsapp Remarks</b></div><div class="col-8"><div class="bg-light ht-35 p-2 fs-10">{{$clientdetail->clientRemark->client_remarks ?? ''}}</div></div></div>
                                 </div>
 
 

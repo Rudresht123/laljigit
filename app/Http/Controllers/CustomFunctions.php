@@ -73,8 +73,6 @@ class CustomFunctions extends Controller
             });
         }
 
-        Log::info($query->toRawSql());
-    
         // Apply ordering
         if ($request->has('order')) {
             $order = $request->input('order')[0];
@@ -202,12 +200,6 @@ $formattedData = $data->transform(function ($item, $index) use ($start,$tableCol
     ->where('id', $request->input('clientId')) 
     ->where('category_id', $request->input('categoryId')) // Apply the condition on trademark_users.category_id
     ->first();
-
-            // $clientDetails = TrademarkUserModel::join('main_category', 'trademark_users.category_id', '=', 'main_category.id')
-            //     ->where('trademark_users.id', $request->input('clientId')) // Fully qualify 'id' with table name
-            //     ->where('trademark_users.category_id', $request->input('categoryId')) // Fully qualify 'category_id' with table name
-            //     ->select('trademark_users.*', 'main_category.category_name as main_category_name','main_category.category_slug as main_category_slug') // Add any other columns from main_category you need
-            //     ->first();
         }
         else {
             $clientDetails = null; // This is just a placeholder for other conditions

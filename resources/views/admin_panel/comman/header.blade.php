@@ -188,7 +188,7 @@
                             <li class="nav-sub-item"><a href="{{ route('admin.global-setting.remarks') }}"
                                     class="nav-sub-link"><i data-feather="layers"></i> Define Remarks</a></li>
                             <li class="nav-sub-item"><a href="{{ route('admin.global-setting.client-remarks') }}"
-                                    class="nav-sub-link"><i data-feather="file-text"></i> Client Remarks</a></li>
+                                    class="nav-sub-link"><i data-feather="file-text"></i> Whatsapp Remarks</a></li>
                         </ul>
                         <ul>
                             <li class="nav-sub-item"><a href="{{ route('admin.systemsetting.all-email-template') }}"

@@ -51,7 +51,8 @@ class TrademarkUserModel extends Model
         'evidence_last_date',
         'client_communication',
         'mail_recived_date',
-        'mail_recived_date_2'	
+        'mail_recived_date_2',
+        'post_hearing_remarks'	
     ];
 
     public function attorney()

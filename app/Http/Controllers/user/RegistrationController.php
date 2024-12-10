@@ -45,7 +45,7 @@ class RegistrationController extends Controller
         $attorney = AttorneysModel::find($attorneyId);
 
 
-        $category = MainCategoryModel::where('category_slug', $categorySlug)->first();
+        $category = MainCategoryModel::where('category_slug', $categorySlug)->where('status', 'yes')->first();
         $classes = TradeMarkClassModel::get();
         $offices = OfficesModel::where('status', 'yes')->get();
         $remarks = RemarksModel::where('is_active', 'yes')->get();
@@ -55,7 +55,7 @@ class RegistrationController extends Controller
 
      
         $statuss = StatusModel::where('status', 'yes')->get();
-        $subcategory = SubcategoryModel::get();
+        $subcategory = SubcategoryModel::where('status', 'yes')->get();
         return view('admin_panel.users.registrationform', compact('attorney', 'category', 'classes', 'statuss', 'remarks', 'offices', 'clientRemarks', 'consultant', 'subcategory','dealWith'));
     }
 
@@ -125,7 +125,6 @@ class RegistrationController extends Controller
     
     // dynamic fileds code end here
         if ($TrademarkUser->save()) {
-            echo $TrademarkUser->id;
 
             StatusHistory::create([
                 'client_id' => $TrademarkUser->id,
@@ -175,7 +174,7 @@ class RegistrationController extends Controller
         $attorney = AttorneysModel::find($attorneyId);
 
         $client = TrademarkUserModel::where('id', $id)->first();
-        $category = MainCategoryModel::where('category_slug', $categorySlug)->first();
+        $category = MainCategoryModel::where('category_slug', $categorySlug)->where('status', 'yes')->first();
         $classes = TradeMarkClassModel::get();
         $offices = OfficesModel::where('status', 'yes')->get();
         $remarks = RemarksModel::where('is_active', 'yes')->get();
@@ -184,8 +183,7 @@ class RegistrationController extends Controller
         $dealWith = DeallerModel::where('status', 'yes')->get();
 
         $statuss = StatusModel::where('status', 'yes')->get();
-        $subcategory = SubcategoryModel::get();
-
+        $subcategory = SubcategoryModel::where('status', 'yes')->get();
 
         return view('admin_panel.users.editClientdetails', compact('client', 'attorney', 'category', 'classes', 'statuss', 'remarks', 'offices', 'clientRemarks', 'consultant', 'subcategory','dealWith'));
     }
@@ -265,22 +263,5 @@ class RegistrationController extends Controller
         }
     }
     
-    
-    /**
-     * Handle status-specific logic
-     */
-   
-    
-    /**
-     * Update status history for the application
-     */
-  
-
-/**
- * Handle the opponent applicant data dynamically
- */
-
-
-
 
 }

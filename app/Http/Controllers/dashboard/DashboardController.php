@@ -23,7 +23,7 @@ class DashboardController extends Controller
         $mcategories = MainCategoryModel::where('status', 'yes')->get();
         $consultant = ConsultantModel::where('status', 'yes')->get();
         $subcategory = SubcategoryModel::get();
-        $attoernyes=AttorneysModel::get();
+        $attoernyes=AttorneysModel::where('status', 'yes')->get();
         $groupedData = TrademarkUserModel::with([
             'mainCategory:*',
             'statusMain:*'
@@ -42,7 +42,13 @@ class DashboardController extends Controller
             'mainCategory:id,category_name'
         ])->whereBetween('opposition_hearing_date',[$startDate,$endDate])->get();
 
-        $upcommingdates=['valid_upto'=>$upcominglastdatevalidupto,'opposition-hearing_date'=>$upcominglastdateoppositionhearingdate];
+        $upcominglastdatehearingdate=TrademarkUserModel::with([
+            'Clientonsultant:id,consultant_name',
+            'statusMain:id,status_name',
+            'mainCategory:id,category_name'
+        ])->whereBetween('hearing_date',[$startDate,$endDate])->get();
+        
+        $upcommingdates=['Valid UpTo'=>$upcominglastdatevalidupto,'Opposition Hearing Date'=>$upcominglastdateoppositionhearingdate,'Hearing Date'=>$upcominglastdatehearingdate];
                  
         return view('admin_panel.dashboard',compact('attoernyes','groupedData','mcategories','consultant','subcategory','upcommingdates'));
     }

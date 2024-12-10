@@ -11,18 +11,18 @@
         <ol class="breadcrumb breadcrumb-style1 mg-b-10">
             <li class="breadcrumb-item"><a href="{{ route('dashboard') }}">Dashboard</a></li>
             <li class="breadcrumb-item active" aria-current="page">Global Setting</li>
-            <li class="breadcrumb-item active" aria-current="page">Client-Remarks</li>
+            <li class="breadcrumb-item active" aria-current="page">Whatsapp-Remarks</li>
         </ol>
     </nav>
 
     <div class="custom-card col-lg-11 mx-auto">
         <div class="panel panel-default">
-            <div class="panel-heading"><b><i class="fa fa-list"></i> Client Remarks List</b></div>
+            <div class="panel-heading"><b><i class="fa fa-list"></i> Whatsapp Remarks List</b></div>
             <div class="panel-body pd-b-0 row">
                 <div class="col-lg-2 mb-3">
                     <button type="button" data-bs-toggle="modal" data-bs-target="#addModal"
                         class="btn btn-block mg-t-10 btn-outline-primary btn-sm rounded-pill px-3">
-                        <i class="fa fa-plus"></i> Add Remarks
+                        <i class="fa fa-plus"></i> Add Whatsapp
                     </button>
 
                     <button type="button" class="btn btn-block btn-outline-dark mg-t-10 btn-sm rounded-pill px-4"><i
@@ -36,7 +36,7 @@
                         <table id="ClientremarksTable" class="table table-hover   fs-10 w-100">
                             <thead class="bg-light fw-bold">
                                 <tr class="py-3">
-                                    <th class="fw-bold">Client Remarks</th>
+                                    <th class="fw-bold">Whatsapp Remarks</th>
                                     <th class="fw-bold">Is-Active</th>
                                     <th class="fw-bold">Action</th>
                                 </tr>
@@ -75,7 +75,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="exampleModalLabel"><i class="fa fa-plus" aria-hidden="true"></i> Add
-                        New Client Remarks</h1>
+                        New Whatsapp Remarks</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -86,7 +86,7 @@
                        
                         
                         <div class="gorm-group ">
-                            <label for="" class="form-label">Client Remarks<span
+                            <label for="" class="form-label">Whatsapp Remarks<span
                                     class="text-danger">*</span></label>
                             <textarea name="client_remarks" required class="form-control" id="" cols="5" rows="5 "></textarea>
                         </div>
@@ -118,21 +118,21 @@
                 <div class="modal-header">
                     <h1 class="modal-title fs-5" id="exampleModalLabel"><i class="fa fa-plus" aria-hidden="true"></i>
                     Edit
-                        Client-Remarks</h1>
+                    Whatsapp-Remarks</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <fieldset class="form-fieldset">
-                        <legend>Remarks Information</legend>
+                        <legend>Whatsapp Information</legend>
                     <form id="editRemarks" method="POST">
                         @csrf
                         <div class="gorm-group " hidden>
-                            <label for="" class="form-label">Remarks ID<span
+                            <label for="" class="form-label">Whatsapp ID<span
                                     class="text-danger">*</span></label>
                             <input type="text" name="remarks_id" id="remarks_id" required class="form-control">
                         </div>
                         <div class="gorm-group ">
-                            <label for="" class="form-label">Client Remarks<span
+                            <label for="" class="form-label">Whatsapp Remarks<span
                                     class="text-danger">*</span></label>
                             <textarea name="client_remarks" required class="form-control" id="" cols="5" rows="5 "></textarea>
                         </div>

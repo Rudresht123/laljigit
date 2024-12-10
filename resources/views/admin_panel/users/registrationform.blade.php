@@ -307,6 +307,11 @@
                                             class="form-control datepicker" name="hearing_date"
                                             placeholder="Please Enter Hearing Date..">
                                     </div>
+
+                                    <div class="col-sm-4" id="post_hearing_remarks" style="display: none;">
+                                        <label for="" class="form-label">Post Hearing Remarks..</label>
+                                        <textarea  class="form-control" name="post_hearing_remarks" id="" cols="1" rows="1"></textarea>
+                                    </div>
                                     {{-- hearing date --}}
 
                                    

@@ -1,17 +1,28 @@
 <?php
-
 use Carbon\Carbon;
 
 if (!function_exists('formatDate')) {
     /**
-     * Format a date.
+     * Formats a date into the desired format (default: 'Y-m-d').
+     * Returns null for invalid or empty dates.
      *
-     * @param string $date
+     * @param string|null $date
      * @param string $format
-     * @return string
+     * @return string|null
      */
-    function formatDate($date, $format = 'Y-m-d H:i:s')
+    function formatDate($date = null, $format = 'Y-m-d')
     {
-        return Carbon::parse($date)->format($format);
+        try {
+            // Return null if $date is null or empty
+            if (!$date) {
+                return null;
+            }
+
+            // Parse and format the date
+            return Carbon::parse($date)->format($format);
+        } catch (\Exception $e) {
+            // Return null for invalid date formats
+            return null;
+        }
     }
 }

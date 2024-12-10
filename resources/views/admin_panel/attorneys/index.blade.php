@@ -172,21 +172,21 @@
 
             // block and unbloc code here
 
-            $('#consultantTable').on('click', '.blockButton', function(e) {
+            $('#AttorneysTable').on('click', '.blockButton', function(e) {
                 e.preventDefault();
                 let itemId = $(this).data('id');
                 let csrf = "{{ csrf_token() }}";
                 let route = "{{ route('admin.block-data') }}";
-                let dbtable = "consultant";
+                let dbtable = "attorneys";
                 let columnname = "status";
                 showConfirmAlert(route, csrf, dbtable, columnname, itemId);
             });
-            $('#consultantTable').on('click', '.blockButton', function(e) {
+            $('#AttorneysTable').on('click', '.blockButton', function(e) {
                 e.preventDefault();
                 let itemId = $(this).data('id');
                 let csrf = "{{ csrf_token() }}";
                 let route = "{{ route('admin.block-data') }}";
-                let dbtable = "consultant";
+                let dbtable = "attorneys";
                 let columnname = "status";
                 showConfirmAlert(route, csrf, dbtable, columnname, itemId);
             });
